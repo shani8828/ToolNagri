@@ -10,7 +10,11 @@ import {
   Scale,
   Globe,
   Youtube,
-  Settings
+  Settings,
+  Percent,
+  Palette,
+  Database,
+  Type
 } from "lucide-react";
 
 export interface ToolItem {
@@ -52,6 +56,14 @@ export const ALL_TOOLS: ToolItem[] = [
     isNew: true,
   },
   {
+    name: "Percentage Calculator",
+    url: "/percent-calculator",
+    description: "Perform common business percentage calculations (percentage change, ratios, additions, and splits).",
+    category: "Calculators",
+    icon: Percent,
+    isNew: true,
+  },
+  {
     name: "QR Code Generator",
     url: "/qr-generator",
     description: "Create fully styled, high-res QR codes for URLs, text, Wi-Fi details, and contacts.",
@@ -85,6 +97,39 @@ export const ALL_TOOLS: ToolItem[] = [
     isNew: true,
   },
   {
+    name: "Color Space Converter",
+    url: "/color-converter",
+    description: "Convert color codes (HEX, RGB, HSL) with real-time WCAG accessibility checks and TailwindCSS color name mapping.",
+    category: "Developer Tools",
+    icon: Palette,
+    isNew: true,
+    isPopular: true,
+  },
+  {
+    name: "CSV to JSON / JSON to CSV",
+    url: "/csv-json",
+    description: "Convert tabular CSV code or files to structured JSON arrays, and serialize JSON back to CSV format.",
+    category: "Developer Tools",
+    icon: FileSpreadsheet,
+    isNew: true,
+  },
+  {
+    name: "SQL Formatter & Minifier",
+    url: "/sql-formatter",
+    description: "Format messy database queries with proper indentation or compress statements to minified strings.",
+    category: "Developer Tools",
+    icon: Database,
+    isNew: true,
+  },
+  {
+    name: "XML Formatter & Prettifier",
+    url: "/xml-formatter",
+    description: "Validate and format raw XML documents with styled line indentations client-side.",
+    category: "Developer Tools",
+    icon: Code2,
+    isNew: true,
+  },
+  {
     name: "Image Compressor",
     url: "/image-compressor",
     description: "Reduce image file sizes instantly while preserving quality using client-side canvas parsing.",
@@ -100,6 +145,22 @@ export const ALL_TOOLS: ToolItem[] = [
     category: "Image Tools",
     icon: FileImage,
     isTrending: false,
+    isNew: true,
+  },
+  {
+    name: "Base64 Image Encoder & Decoder",
+    url: "/base64-image",
+    description: "Upload local image files to instantly get raw Base64 data URLs, or render images from Base64 strings.",
+    category: "Image Tools",
+    icon: FileImage,
+    isNew: true,
+  },
+  {
+    name: "SVG Code Optimizer",
+    url: "/svg-optimizer",
+    description: "Optimize raw SVG vector paths, strip empty elements, check layout viewports, and minify graphics.",
+    category: "Image Tools",
+    icon: Code2,
     isNew: true,
   },
   {
@@ -141,6 +202,30 @@ export const ALL_TOOLS: ToolItem[] = [
     description: "Calculate total characters with and without spaces, check lines, letters, numbers, and densities.",
     category: "Text Tools",
     icon: FileText,
+  },
+  {
+    name: "Markdown to HTML Converter",
+    url: "/markdown-to-html",
+    description: "Convert Markdown syntax into clean HTML output with live preview rendering and one-click copy.",
+    category: "Text Tools",
+    icon: FileText,
+    isNew: true,
+  },
+  {
+    name: "Lorem Ipsum Generator",
+    url: "/lorem-ipsum",
+    description: "Generate mock placeholder copy with custom sentence, paragraph, and layout parameters.",
+    category: "Text Tools",
+    icon: Type,
+    isNew: true,
+  },
+  {
+    name: "Regular Expression Tester",
+    url: "/regex-tester",
+    description: "Test regular expressions with highlights, match lists, validation, and plain English descriptions.",
+    category: "Developer Tools",
+    icon: Settings,
+    isNew: true,
   },
   {
     name: "YouTube Thumbnail Downloader",

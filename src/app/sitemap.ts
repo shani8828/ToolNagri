@@ -1,34 +1,22 @@
 import { MetadataRoute } from "next";
+import { ALL_TOOLS } from "@/lib/tools";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://toolnagri.vercel.app";
   
-  const routes = [
+  const staticRoutes = [
     "",
     "/all-tools",
-    "/url-shortener",
-    "/age-calculator",
-    "/emi-calculator",
-    "/qr-generator",
-    "/password-generator",
-    "/json-formatter",
-    "/image-compressor",
-    "/jpg-to-webp",
-    "/pdf-merge",
-    "/unit-converter",
-    "/timezone-converter",
-    "/word-counter",
-    "/character-counter",
-    "/youtube-thumbnail",
-    "/utm-builder",
-    "/base64",
     "/contact",
     "/privacy",
     "/terms",
     "/disclaimer",
   ];
 
-  return routes.map((route) => ({
+  const toolRoutes = ALL_TOOLS.map((tool) => tool.url);
+  const allRoutes = Array.from(new Set([...staticRoutes, ...toolRoutes]));
+
+  return allRoutes.map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
