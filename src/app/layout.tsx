@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description: "Premium developer utilities, converters, calculators, and image compressors, hosted free on Vercel.",
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "",
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "QbR9SUSpfND1I45D258mIR6etoJOu7xKMMaBA3l214A",
   },
 };
 
