@@ -354,11 +354,22 @@ export default function UrlShortener() {
               )}
 
               {/* Success Tips */}
-              <div className="flex flex-col justify-center gap-2 md:col-span-2 text-sm text-secondary-text">
+              <div className="flex flex-col justify-center gap-2.5 md:col-span-2 text-sm text-secondary-text">
                 <h4 className="font-heading font-semibold text-primary-text">Next Steps</h4>
-                <p>🚀 Copy your link and use it in social media captions, newsletters, and flyers.</p>
-                <p>📊 Below you can see the number of times this link has been clicked in real-time.</p>
-                <p>🔒 If you set an expiration, the link will redirect to the home page after the date passes.</p>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent font-semibold">•</span>
+                    <span>Copy your link and use it in social media captions, newsletters, and flyers.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent font-semibold">•</span>
+                    <span>Below you can see the number of times this link has been clicked in real-time.</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-accent font-semibold">•</span>
+                    <span>If you set an expiration, the link will redirect to the home page after the date passes.</span>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>

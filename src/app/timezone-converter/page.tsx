@@ -184,7 +184,7 @@ export default function TimezoneConverter() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="baseTime" className="block text-sm font-semibold text-primary-text items-center gap-1">
+            <label htmlFor="baseTime" className="text-sm font-semibold text-primary-text flex items-center gap-1">
               <Clock className="h-4 w-4 text-accent" /> Base Time
             </label>
             <input

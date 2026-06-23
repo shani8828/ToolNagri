@@ -108,7 +108,7 @@ export default function Footer() {
             © {new Date().getFullYear()} ToolNagri. All rights reserved.
           </p>
           <p className="text-xs text-secondary-text font-medium">
-            ToolNagri is owned, operated, and managed by Ayodhya Serenity. All rights reserved.
+            Owned, operated & managed by <Link href="https://ayodhyaserenity.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Ayodhya Serenity.</Link>
           </p>
         </div>
       </div>

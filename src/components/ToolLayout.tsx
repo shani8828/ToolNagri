@@ -43,17 +43,16 @@ export default function ToolLayout({
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         
         {/* Navigation Breadcrumbs */}
-        <nav className="mb-6 flex items-center gap-2 text-sm text-secondary-text">
-          <Link href="/" className="hover:text-accent flex items-center gap-1 transition-colors">
-            <ArrowLeft className="h-3.5 w-3.5" />
+        <nav className="mb-6 flex items-center gap-2 text-xs md:text-sm text-secondary-text font-medium">
+          <Link href="/" className="hover:text-accent transition-colors">
             Home
           </Link>
           <ChevronRight className="h-3.5 w-3.5" />
-          <Link href={categoryUrl} className="hover:text-accent transition-colors">
-            {category}
+          <Link href="/all-tools" className="hover:text-accent transition-colors">
+            All Tools
           </Link>
           <ChevronRight className="h-3.5 w-3.5" />
-          <span className="text-primary-text font-medium">{title}</span>
+          <span className="text-primary-text font-semibold">{title}</span>
         </nav>
 
         {/* SECTION 1: Tool Hero */}

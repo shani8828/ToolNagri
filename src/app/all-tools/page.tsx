@@ -2,173 +2,39 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  Search,
-  Calculator,
-  QrCode,
-  Lock,
-  Code2,
-  FileImage,
-  FileText,
-  Youtube,
-  Link2,
-  Settings,
-  Scale,
-  Globe,
-  FileSpreadsheet,
-  ArrowRight,
-  Sparkles
-} from "lucide-react";
+import { Search, ArrowRight } from "lucide-react";
+import { ALL_TOOLS } from "@/lib/tools";
 
-interface ToolItem {
-  name: string;
-  url: string;
-  description: string;
-  icon: React.ComponentType<{ className?: string }>;
-  isPopular?: boolean;
-  isNew?: boolean;
-}
-
-interface CategoryGroup {
-  categoryName: string;
-  description: string;
-  tools: ToolItem[];
-}
-
-const CATEGORY_GROUPS: CategoryGroup[] = [
-  {
-    categoryName: "Calculators",
-    description: "Calculate dates, ages, financial metrics, and values instantly.",
-    tools: [
-      {
-        name: "Age Calculator",
-        url: "/age-calculator",
-        description: "Determine exact age in years, months, weeks, days, and minutes.",
-        icon: Calculator,
-        isPopular: true,
-      },
-      {
-        name: "EMI Calculator",
-        url: "/emi-calculator",
-        description: "Calculate monthly loan EMIs, interest payable, and total costs.",
-        icon: FileSpreadsheet,
-        isPopular: true,
-        isNew: true,
-      },
-    ],
-  },
-  {
-    categoryName: "Image & PDF Tools",
-    description: "Compress formats and compile visual and text files in-browser.",
-    tools: [
-      {
-        name: "Image Compressor",
-        url: "/image-compressor",
-        description: "Reduce image file sizes instantly while maintaining quality client-side.",
-        icon: FileImage,
-        isPopular: true,
-      },
-      {
-        name: "JPG to WebP Converter",
-        url: "/jpg-to-webp",
-        description: "Convert standard images to lightweight WebP format to speed up performance.",
-        icon: FileImage,
-        isNew: true,
-      },
-      {
-        name: "Merge PDF Files Online",
-        url: "/pdf-merge",
-        description: "Combine multiple PDF documents into a single file client-side.",
-        icon: FileText,
-        isNew: true,
-      },
-    ],
-  },
-  {
-    categoryName: "Developer Utilities",
-    description: "Beautify data patterns, create keys, and convert formats.",
-    tools: [
-      {
-        name: "QR Code Generator",
-        url: "/qr-generator",
-        description: "Create fully custom styling QR codes for text, Wi-Fi networks, and contact details.",
-        icon: QrCode,
-        isPopular: true,
-      },
-      {
-        name: "Secure Password Generator",
-        url: "/password-generator",
-        description: "Configure secure passwords with custom specifications client-side.",
-        icon: Lock,
-        isNew: true,
-      },
-      {
-        name: "JSON Formatter & Validator",
-        url: "/json-formatter",
-        description: "Format, minify, and validate JSON snippets with syntax highlighting.",
-        icon: Code2,
-      },
-      {
-        name: "Base64 Encoder & Decoder",
-        url: "/base64",
-        description: "Convert raw strings or files to Base64 schema encoding and decode back.",
-        icon: Code2,
-        isNew: true,
-      },
-    ],
-  },
-  {
-    categoryName: "Conversion & Utility Tools",
-    description: "Convert daily measuring parameters and timezones in real-time.",
-    tools: [
-      {
-        name: "Unit Converter",
-        url: "/unit-converter",
-        description: "Convert metrics across Length, Weight, Temperature, Area, and Speed.",
-        icon: Scale,
-        isNew: true,
-      },
-      {
-        name: "Time zone Converter",
-        url: "/timezone-converter",
-        description: "Compare and translate dates and times across major global timezones.",
-        icon: Globe,
-        isNew: true,
-      },
-    ],
-  },
-  {
-    categoryName: "Social & SEO Helpers",
-    description: "Shorten links, track UTM campaigns, and download assets.",
-    tools: [
-      {
-        name: "Free URL Shortener",
-        url: "/url-shortener",
-        description: "Shorten links, generate QR codes, and view analytics parameters.",
-        icon: Link2,
-        isPopular: true,
-      },
-      {
-        name: "UTM Campaign URL Builder",
-        url: "/utm-builder",
-        description: "Quickly build UTM marketing campaign tags to append to your landing page URLs.",
-        icon: Settings,
-      },
-      {
-        name: "YouTube Thumbnail Downloader",
-        url: "/youtube-thumbnail",
-        description: "Parse and save static preview images and HD thumbnails from any YouTube link.",
-        icon: Youtube,
-      },
-    ],
-  },
-];
+const CATEGORY_DESCRIPTIONS: Record<string, string> = {
+  "Calculators": "Calculate dates, ages, financial metrics, and values instantly.",
+  "Image Tools": "Compress and convert standard visual file types in-browser.",
+  "PDF Tools": "Compile, merge, and split PDF documents locally inside your browser.",
+  "Developer Tools": "Validate payloads, format files, and encode strings securely.",
+  "Utility Tools": "Convert daily measuring parameters and timezones in real-time.",
+  "Text Tools": "Analyze character limits, reading speeds, word counts, and text density.",
+  "SEO Tools": "Generate marketing tags and check index settings to boost site views.",
+  "Social Tools": "Parse video previews and extract high-resolution cover templates."
+};
 
 export default function AllTools() {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredGroups = CATEGORY_GROUPS.map((group) => {
+  // Group ALL_TOOLS by their category dynamically
+  const groupsMap: Record<string, typeof ALL_TOOLS> = {};
+  ALL_TOOLS.forEach((tool) => {
+    if (!groupsMap[tool.category]) {
+      groupsMap[tool.category] = [];
+    }
+    groupsMap[tool.category].push(tool);
+  });
+
+  const categoryGroups = Object.keys(groupsMap).map((categoryName) => ({
+    categoryName,
+    description: CATEGORY_DESCRIPTIONS[categoryName] || "Essential utility tools for daily digital tasks.",
+    tools: groupsMap[categoryName]
+  }));
+
+  const filteredGroups = categoryGroups.map((group) => {
     const matchingTools = group.tools.filter(
       (tool) =>
         tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
