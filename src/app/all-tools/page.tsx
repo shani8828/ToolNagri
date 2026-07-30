@@ -43,7 +43,7 @@ export default function AllToolsPage() {
         </h1>
         <p className="mt-4 text-[15px] leading-relaxed text-secondary-text md:text-base">
           The complete catalogue, grouped into {CATEGORIES.length} categories. Every tool is free,
-          needs no account, and — apart from the few that must query a live service — does all its
+          needs no account, and - apart from the few that must query a live service - does all its
           work inside your browser.
         </p>
       </header>

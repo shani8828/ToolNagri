@@ -5,7 +5,7 @@ import { POPULAR_TOOLS, TOOLS, toolsInCategory } from "@/lib/tools";
 import { CONTACT_EMAIL, ORG_NAME, ORG_URL, SITE_NAME } from "@/lib/site";
 
 /**
- * Server component — no client JS. The category links here previously pointed
+ * Server component - no client JS. The category links here previously pointed
  * at homepage anchors (/#calculators) that no longer existed; they now target
  * the real hub pages, which also spreads internal link equity across them.
  */
@@ -34,7 +34,7 @@ export default function Footer() {
             </a>
           </div>
 
-          {/* Categories — split across two columns */}
+          {/* Categories - split across two columns */}
           <FooterColumn title="Categories">
             {CATEGORIES.slice(0, 4).map((category) => (
               <FooterLink key={category.slug} href={`/tools/${category.slug}`}>
@@ -67,7 +67,7 @@ export default function Footer() {
             ))}
           </FooterColumn>
 
-          {/* Legal — moved out of the header, where it was taking up prime space */}
+          {/* Legal - moved out of the header, where it was taking up prime space */}
           <FooterColumn title="Legal">
             <FooterLink href="/privacy">Privacy Policy</FooterLink>
             <FooterLink href="/terms">Terms of Service</FooterLink>

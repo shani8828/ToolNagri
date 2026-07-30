@@ -5,7 +5,7 @@ A modern, privacy-first web utility platform offering a comprehensive suite of o
 ## Resume Points
 
 * **Developed** a high-performance, privacy-first web utility platform containing 40+ specialized developer, calculator, image, and text tools utilizing Next.js 16, TypeScript, and Tailwind CSS v4.
-* **Architected** a serverless, client-side processing model executing heavy document and image processing—including multi-file PDF merging, page splitting, and Canvas-based image compression—directly within the browser, eliminating server-side bandwidth overhead and ensuring absolute user data privacy.
+* **Architected** a serverless, client-side processing model executing heavy document and image processing-including multi-file PDF merging, page splitting, and Canvas-based image compression-directly within the browser, eliminating server-side bandwidth overhead and ensuring absolute user data privacy.
 * **Engineered** a dynamic URL shortening service with custom slug parameters, link expiration logic, and automated redirection handlers via dynamic Next.js API route segments.
 * **Integrated** MongoDB Atlas utilizing the native Node.js MongoDB driver to record shortened link records, automate expired slug cleanups, and track real-time analytics including cumulative click metrics.
 * **Implemented** external API integrations, including Cloudflare's secure DNS-over-HTTPS (DoH) API for real-time client-side DNS record resolution (A, AAAA, MX, TXT) and ipapi/ipify REST APIs for automated client IP and geolocation lookups.

@@ -34,6 +34,6 @@ export default async function ShortLinkPage({
     return <ExpiredLink slug={slug} />;
   }
 
-  // Must be outside any try/catch — redirect() signals by throwing.
+  // Must be outside any try/catch - redirect() signals by throwing.
   redirect(result.url);
 }

@@ -11,7 +11,7 @@ import {
 import { isReservedSlug, validateDestination } from "@/lib/url-safety";
 
 /**
- * Public, unauthenticated endpoints — hardened accordingly.
+ * Public, unauthenticated endpoints - hardened accordingly.
  *
  * Previously this action accepted any string as a destination, used
  * Math.random() for slugs, and enforced uniqueness with a check-then-write
@@ -31,7 +31,7 @@ const SLUG_ALPHABET = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789
 const MAX_CUSTOM_SLUG = 48;
 const MAX_ANALYTICS_SLUGS = 100;
 
-/** Cryptographically random slug — Math.random() is predictable and guessable. */
+/** Cryptographically random slug - Math.random() is predictable and guessable. */
 function generateSlug(length = 7): string {
   let slug = "";
   for (let i = 0; i < length; i++) {
@@ -140,7 +140,7 @@ export async function createShortUrlAction(
       };
     }
 
-    // 5. Random slug — retry on the astronomically unlikely collision.
+    // 5. Random slug - retry on the astronomically unlikely collision.
     for (let attempt = 0; attempt < 5; attempt++) {
       const slug = generateSlug();
       try {

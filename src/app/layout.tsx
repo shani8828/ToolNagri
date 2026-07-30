@@ -31,12 +31,12 @@ const outfit = Outfit({
  * Deliberately no `alternates.canonical` here. Setting one at the root meant
  * every child route inherited the homepage canonical and declared itself a
  * duplicate. Each route now supplies its own via `pageMetadata()`, so a route
- * that forgets simply has no canonical — recoverable — instead of the wrong one.
+ * that forgets simply has no canonical - recoverable - instead of the wrong one.
  */
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Free Online Tools That Run in Your Browser`,
+    default: `${SITE_NAME} - Free Online Tools That Run in Your Browser`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   /*
     No `robots` block here. index/follow is already the default, and declaring
     it at the root stamped "index, follow" onto the 404 page alongside the
-    "noindex" Next.js adds for a 404 status — two contradictory directives on
+    "noindex" Next.js adds for a 404 status - two contradictory directives on
     one page. Indexable routes opt in through `pageMetadata()` instead.
   */
   verification: {
@@ -61,9 +61,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // Matches --background so mobile browser chrome blends into the page.
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#f8fbfd" },
+    { media: "(prefers-color-scheme: dark)", color: "#0c1520" },
   ],
   colorScheme: "light",
 };

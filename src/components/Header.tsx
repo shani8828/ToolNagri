@@ -220,7 +220,7 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Desktop mega panel — one panel for every category, content swaps. */}
+        {/* Desktop mega panel - one panel for every category, content swaps. */}
         {activeCategory && (
           <div
             className="absolute inset-x-0 top-full hidden lg:block"

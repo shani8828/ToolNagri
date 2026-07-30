@@ -47,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
 
-    // Category hubs — the pages targeting "free pdf tools online" and friends.
+    // Category hubs - the pages targeting "free pdf tools online" and friends.
     ...CATEGORIES.map((category) => ({
       url: absoluteUrl(`/tools/${category.slug}`),
       lastModified: latest,

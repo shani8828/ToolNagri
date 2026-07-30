@@ -24,7 +24,7 @@ import { SITE_DESCRIPTION } from "@/lib/site";
  * accidentally inherit "/" as its canonical the way all 42 tool pages did.
  */
 export const metadata = pageMetadata({
-  title: "Free Online Tools — PDF, Image, Text & Developer Utilities",
+  title: "Free Online Tools - PDF, Image, Text & Developer Utilities",
   description: SITE_DESCRIPTION,
   path: "/",
   keywords: [
@@ -71,7 +71,7 @@ export default function Home() {
 
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-secondary-text md:text-lg">
                 Merge PDFs, compress images, format JSON, generate QR codes and calculate loan EMIs
-                — {TOOLS.length} utilities that process your files locally. Nothing is uploaded,
+                - {TOOLS.length} utilities that process your files locally. Nothing is uploaded,
                 nothing is stored, and there are no limits or accounts.
               </p>
 

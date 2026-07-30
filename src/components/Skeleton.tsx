@@ -2,14 +2,14 @@
  * Skeleton primitives.
  *
  * Deliberately NOT wired into a root `loading.tsx`. Nearly every route here is
- * statically prerendered, so there is no loading phase to fill — a root
+ * statically prerendered, so there is no loading phase to fill - a root
  * loading boundary forced React to stream a Suspense placeholder and shipped
  * ~32 skeleton nodes inside every page's HTML, adding weight and a visible
  * flash before content that was already there.
  *
  * Use these for genuine waits instead: work a tool performs after interaction
  * (compressing an image, parsing a large PDF) or a route that queries a
- * database. Shimmer is CSS-only — see `.skeleton` in globals.css.
+ * database. Shimmer is CSS-only - see `.skeleton` in globals.css.
  */
 
 export function Skeleton({ className = "" }: { className?: string }) {

@@ -19,7 +19,7 @@ function ToolGlyph({ name, className }: { name: IconName; className: string }) {
 }
 
 /**
- * Server component — the tool grids render with no client JS at all.
+ * Server component - the tool grids render with no client JS at all.
  * Hover and focus states are pure CSS.
  */
 export default function ToolCard({ tool, compact = false }: { tool: Tool; compact?: boolean }) {

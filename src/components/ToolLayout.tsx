@@ -198,7 +198,7 @@ export default function ToolLayout({
           </section>
         </div>
 
-        {/* FAQs — native <details>, so the answers are in the HTML with no JS. */}
+        {/* FAQs - native <details>, so the answers are in the HTML with no JS. */}
         {faqs.length > 0 && (
           <section className="mb-14 border-t border-border-color pt-12">
             <h2 className="font-heading text-xl font-bold text-primary-text md:text-2xl">

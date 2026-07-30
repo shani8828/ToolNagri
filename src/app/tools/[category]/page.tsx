@@ -93,7 +93,7 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
         ))}
       </div>
 
-      {/* Cross-links to the other hubs — spreads crawl depth and link equity. */}
+      {/* Cross-links to the other hubs - spreads crawl depth and link equity. */}
       <section className="mt-20 border-t border-border-color pt-12">
         <h2 className="font-heading text-xl font-bold text-primary-text md:text-2xl">
           Other categories

@@ -5,7 +5,7 @@ import type { NextConfig } from "next";
  *
  * A Content-Security-Policy is deliberately not set here. Google Tag Manager
  * injects scripts at runtime, so a workable CSP needs a per-request nonce
- * threaded through the response — worth doing, but it belongs in middleware
+ * threaded through the response - worth doing, but it belongs in middleware
  * where that nonce can be generated. Shipping a CSP loose enough to
  * accommodate GTM without a nonce ('unsafe-inline' plus wildcards) would look
  * like protection while providing almost none.

@@ -1,7 +1,7 @@
 /**
  * Tool taxonomy.
  *
- * Pure data — no React imports — so this module is safe to pull into server
+ * Pure data - no React imports - so this module is safe to pull into server
  * components, the sitemap and route handlers without dragging UI into the
  * bundle. Icons are referenced by name and resolved in `tool-icons.ts`.
  *
@@ -45,7 +45,7 @@ export const CATEGORIES: Category[] = [
     name: "PDF",
     label: "PDF Tools",
     tagline: "Merge, split, rotate and convert PDF files.",
-    seoTitle: "Free PDF Tools Online — Merge, Split, Rotate & Convert",
+    seoTitle: "Free PDF Tools Online - Merge, Split, Rotate & Convert",
     seoDescription:
       "Free online PDF tools that work in your browser. Merge, split, rotate and convert PDF files without uploading them to a server. No watermarks, no signup.",
     intro:
@@ -57,9 +57,9 @@ export const CATEGORIES: Category[] = [
     name: "Image",
     label: "Image Tools",
     tagline: "Compress, convert and optimise images.",
-    seoTitle: "Free Image Tools Online — Compress, Convert & Optimise",
+    seoTitle: "Free Image Tools Online - Compress, Convert & Optimise",
     seoDescription:
-      "Compress JPG and PNG files, convert between WebP, PNG and JPG, and optimise SVG code. Runs entirely in your browser — images never leave your device.",
+      "Compress JPG and PNG files, convert between WebP, PNG and JPG, and optimise SVG code. Runs entirely in your browser - images never leave your device.",
     intro:
       "These image tools use the browser's own Canvas API to resize, compress and re-encode your files locally. Nothing is uploaded, so there is no wait for a round trip and no question about who else can see your photos.",
     icon: "image",
@@ -69,7 +69,7 @@ export const CATEGORIES: Category[] = [
     name: "Text",
     label: "Text Tools",
     tagline: "Count, compare, convert and clean up text.",
-    seoTitle: "Free Online Text Tools — Word Count, Diff, Case Converter",
+    seoTitle: "Free Online Text Tools - Word Count, Diff, Case Converter",
     seoDescription:
       "Count words and characters, compare two texts, convert letter case, render Markdown and generate placeholder copy. Free, instant and fully client-side.",
     intro:
@@ -81,7 +81,7 @@ export const CATEGORIES: Category[] = [
     name: "Developer",
     label: "Developer Tools",
     tagline: "Format, validate, encode and debug.",
-    seoTitle: "Free Developer Tools Online — JSON, Base64, JWT, Regex",
+    seoTitle: "Free Developer Tools Online - JSON, Base64, JWT, Regex",
     seoDescription:
       "Format and validate JSON, XML, SQL and YAML. Encode Base64, decode JWTs, test regular expressions and convert colours. Free, fast and fully client-side.",
     intro:
@@ -93,11 +93,11 @@ export const CATEGORIES: Category[] = [
     name: "Calculators",
     label: "Calculators & Converters",
     tagline: "Loans, percentages, ages, units and time zones.",
-    seoTitle: "Free Online Calculators — EMI, Age, Percentage & Unit Converter",
+    seoTitle: "Free Online Calculators - EMI, Age, Percentage & Unit Converter",
     seoDescription:
       "Calculate loan EMIs and total interest, work out exact age, solve percentage problems, and convert units and time zones. Free and instant.",
     intro:
-      "Everyday maths without the spreadsheet. Loan repayment schedules, precise age breakdowns, percentage change, unit conversion and time-zone comparison — all computed instantly as you change the inputs.",
+      "Everyday maths without the spreadsheet. Loan repayment schedules, precise age breakdowns, percentage change, unit conversion and time-zone comparison - all computed instantly as you change the inputs.",
     icon: "calculator",
   },
   {
@@ -105,7 +105,7 @@ export const CATEGORIES: Category[] = [
     name: "SEO & Marketing",
     label: "SEO & Marketing Tools",
     tagline: "Short links, QR codes, UTM tags and slugs.",
-    seoTitle: "Free SEO & Marketing Tools — URL Shortener, QR Codes, UTM Builder",
+    seoTitle: "Free SEO & Marketing Tools - URL Shortener, QR Codes, UTM Builder",
     seoDescription:
       "Shorten URLs with click tracking, generate custom QR codes, build UTM campaign links, create SEO slugs and grab YouTube thumbnails. Free to use.",
     intro:
@@ -117,7 +117,7 @@ export const CATEGORIES: Category[] = [
     name: "Network & Security",
     label: "Network & Security Tools",
     tagline: "DNS records, IP lookup and strong passwords.",
-    seoTitle: "Free Network & Security Tools — DNS Lookup, IP Address, Passwords",
+    seoTitle: "Free Network & Security Tools - DNS Lookup, IP Address, Passwords",
     seoDescription:
       "Look up DNS records for any domain, check your public IP address and ISP details, and generate cryptographically secure passwords. Free and instant.",
     intro:

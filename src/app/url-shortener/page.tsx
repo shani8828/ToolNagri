@@ -84,7 +84,7 @@ export default function UrlShortener() {
 
     if (res.success && res.slug) {
       const host = window.location.origin;
-      // /s/ namespace — keeps the root free for real pages so unknown URLs can
+      // /s/ namespace - keeps the root free for real pages so unknown URLs can
       // return a genuine 404 instead of being treated as short links.
       const shortened = `${host}/s/${res.slug}`;
       setResult({ shortUrl: shortened, slug: res.slug });

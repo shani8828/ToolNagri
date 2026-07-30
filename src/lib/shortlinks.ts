@@ -20,7 +20,7 @@ export const SLUG_PATTERN = /^[a-zA-Z0-9_-]{3,48}$/;
  */
 let indexesReady: Promise<void> | null = null;
 
-/** Raw handle with no index bootstrapping — used by the bootstrapper itself. */
+/** Raw handle with no index bootstrapping - used by the bootstrapper itself. */
 async function rawCollection() {
   const client = await clientPromise;
   return client.db(SHORTLINK_DB).collection<ShortUrlDoc>(SHORTLINK_COLLECTION);
@@ -30,7 +30,7 @@ export async function shortUrlCollection() {
   const collection = await rawCollection();
 
   indexesReady ??= ensureShortlinkIndexes().catch((error) => {
-    // Don't cache a failure — let the next caller retry.
+    // Don't cache a failure - let the next caller retry.
     indexesReady = null;
     console.error("Failed to create shortlink indexes:", error);
   });
@@ -51,7 +51,7 @@ export type ResolveResult =
  * Returns a discriminated result rather than throwing or redirecting so the
  * caller decides the HTTP semantics. The previous implementation redirected
  * misses to `/?error=not-found`, which meant every unknown URL on the domain
- * answered 307 → 200 instead of 404 — an unbounded supply of soft 404s.
+ * answered 307 → 200 instead of 404 - an unbounded supply of soft 404s.
  */
 export async function resolveShortLink(slug: string): Promise<ResolveResult> {
   // Reject anything that cannot be a slug before touching the database, so a

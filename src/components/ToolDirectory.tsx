@@ -12,7 +12,7 @@ import { TOOLS, toolsInCategory } from "@/lib/tools";
  * Filterable tool directory.
  *
  * The initial render has an empty query, so every tool is present in the
- * prerendered HTML that crawlers receive — filtering is a progressive
+ * prerendered HTML that crawlers receive - filtering is a progressive
  * enhancement on top of a complete, indexable list.
  */
 export default function ToolDirectory() {
@@ -67,7 +67,7 @@ export default function ToolDirectory() {
         )}
       </div>
 
-      {/* Category jump links — only useful when showing everything. */}
+      {/* Category jump links - only useful when showing everything. */}
       {!term && (
         <nav aria-label="Jump to category" className="mt-8 flex flex-wrap gap-2">
           {CATEGORIES.map((category) => (

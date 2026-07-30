@@ -8,7 +8,7 @@ import { TriangleAlert } from "lucide-react";
  * Route-level error boundary. Keeps a crashing tool from taking down the whole
  * shell and gives the visitor a way out.
  *
- * The raw error message is deliberately not rendered — it can contain internal
+ * The raw error message is deliberately not rendered - it can contain internal
  * paths or values from whatever the user was processing. The digest is a safe
  * identifier that correlates with the server log.
  */
@@ -34,7 +34,7 @@ export default function Error({
       </h1>
       <p className="mt-3 text-[14px] leading-relaxed text-secondary-text">
         This tool hit an unexpected error. Your files were being processed in your browser, so
-        nothing was uploaded or lost — reloading usually clears it.
+        nothing was uploaded or lost - reloading usually clears it.
       </p>
 
       {error.digest && (

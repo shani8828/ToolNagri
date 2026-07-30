@@ -8,7 +8,7 @@
  *
  * Because this module is imported by client components too, the value has to
  * resolve identically on server and client. It therefore depends only on
- * build-time-inlined values (NEXT_PUBLIC_* and NODE_ENV) — never on
+ * build-time-inlined values (NEXT_PUBLIC_* and NODE_ENV) - never on
  * request-time or server-only variables, which would cause a hydration
  * mismatch between prerendered HTML and the browser.
  */

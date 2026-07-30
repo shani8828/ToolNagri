@@ -10,7 +10,7 @@ import { TOOLS } from "@/lib/tools";
  * X, LinkedIn or Slack rendered as a bare link. Individual routes can override
  * this by adding their own opengraph-image file.
  */
-export const alt = `${SITE_NAME} — free online tools that run in your browser`;
+export const alt = `${SITE_NAME} - free online tools that run in your browser`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -24,7 +24,7 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#ffffff",
+          background: "#f8fbfd",
           padding: "72px",
           fontFamily: "sans-serif",
         }}

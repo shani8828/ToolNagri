@@ -19,7 +19,7 @@ const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
 /**
  * Hostnames that must never be redirect targets.
  *
- * We don't fetch these URLs server-side, so this isn't classic SSRF — but a
+ * We don't fetch these URLs server-side, so this isn't classic SSRF - but a
  * short link pointing at 127.0.0.1 or a cloud metadata address aims the
  * *visitor's* browser at their own network, which is not something this site
  * should lend its domain to.
@@ -92,7 +92,7 @@ export function validateDestination(input: string): UrlCheck {
     return { ok: false, reason: "Links to local or private addresses aren't allowed." };
   }
 
-  // Don't let the shortener point at itself — that's how redirect loops and
+  // Don't let the shortener point at itself - that's how redirect loops and
   // chained-redirect cloaking get built.
   try {
     if (parsed.hostname === new URL(SITE_URL).hostname) {
@@ -110,7 +110,7 @@ export function validateDestination(input: string): UrlCheck {
  *
  * Derived from the catalogue rather than hand-listed. The previous hard-coded
  * array named 12 slugs while 42 tools existed, so a user could claim
- * "pdf-merge" and get a link that silently never resolved — static routes win
+ * "pdf-merge" and get a link that silently never resolved - static routes win
  * in Next.js routing, so the redirect would never fire.
  */
 const EXTRA_RESERVED = [

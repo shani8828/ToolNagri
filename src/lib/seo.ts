@@ -48,7 +48,7 @@ const OG_IMAGE = {
   url: absoluteUrl("/opengraph-image"),
   width: 1200,
   height: 630,
-  alt: `${SITE_NAME} — free online tools that run in your browser`,
+  alt: `${SITE_NAME} - free online tools that run in your browser`,
 };
 
 export function pageMetadata({
@@ -177,14 +177,16 @@ export function breadcrumbNode(trail: { name: string; path: string }[]): Json {
 /**
  * Describes a tool as a free web application.
  *
- * Deliberately omits `aggregateRating` — there are no real user ratings to
+ * Deliberately omits `aggregateRating` - there are no real user ratings to
  * report, and inventing them is both dishonest and a spam signal.
  */
 export function softwareApplicationNode(tool: Tool, category: Category): Json {
   return {
     "@type": "SoftwareApplication",
     "@id": `${absoluteUrl(`/${tool.slug}`)}#app`,
-    name: tool.seoTitle.split("—")[0].trim(),
+    name: (tool.seoTitle.includes("-")
+      ? tool.seoTitle.split("-")[0]
+      : tool.seoTitle.split("-")[0])!.trim(),
     url: absoluteUrl(`/${tool.slug}`),
     description: tool.seoDescription,
     applicationCategory: "UtilitiesApplication",

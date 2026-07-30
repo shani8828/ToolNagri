@@ -11,7 +11,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/api/",
           // User-generated short links. These are 307 redirects to third-party
-          // destinations — no reason to spend crawl budget on them, and no
+          // destinations - no reason to spend crawl budget on them, and no
           // reason for our domain to pass signals to whatever they point at.
           "/s/",
         ],

@@ -40,7 +40,7 @@ The full list is at [`/all-tools`](https://toolnagri.vercel.app/all-tools).
 * **Framework:** Next.js 16 (App Router), statically prerendered wherever possible
 * **Language:** TypeScript
 * **Styling:** Tailwind CSS v4 with CSS custom properties
-* **Database:** MongoDB Atlas — used only by the URL shortener
+* **Database:** MongoDB Atlas - used only by the URL shortener
 * **Icons:** Lucide React
 * **Analytics:** Google Tag Manager (configure the GA4 tag inside the container)
 
@@ -52,7 +52,7 @@ The full list is at [`/all-tools`](https://toolnagri.vercel.app/all-tools).
 
 `src/lib/tools.ts` holds every tool's slug, category, SEO title, description, keywords and content date. `src/lib/categories.ts` holds the taxonomy. Both are **pure data with no React imports**, so the sitemap, route handlers and server components can read them without pulling UI into the bundle. Icons are referenced by name and resolved through `src/lib/tool-icons.ts`.
 
-Anything derived from a tool — its category badge, breadcrumbs, related tools, sitemap entry, metadata — reads from here. A tool cannot disagree with the catalogue about which category it is in.
+Anything derived from a tool - its category badge, breadcrumbs, related tools, sitemap entry, metadata - reads from here. A tool cannot disagree with the catalogue about which category it is in.
 
 ### Metadata is generated, not hand-written
 
@@ -62,7 +62,7 @@ Each tool route needs a server `layout.tsx` because its `page.tsx` is a client c
 node src/lib/generate-layouts.js
 ```
 
-Re-run it after adding a tool to `tools.ts`. The generated files contain no copy of their own — they call `toolMetadata(slug)` in `src/lib/seo.ts`, which builds the title, description, canonical URL and Open Graph block from the catalogue.
+Re-run it after adding a tool to `tools.ts`. The generated files contain no copy of their own - they call `toolMetadata(slug)` in `src/lib/seo.ts`, which builds the title, description, canonical URL and Open Graph block from the catalogue.
 
 > **Why generated:** the root layout previously set `alternates.canonical: "/"`. Next.js merges metadata parent-to-child, so all 42 tool pages inherited it and declared themselves duplicates of the homepage. Routing every route's canonical through one helper makes that class of bug impossible to reintroduce quietly.
 
@@ -70,9 +70,9 @@ Re-run it after adding a tool to `tools.ts`. The generated files contain no copy
 
 `src/lib/seo.ts` builds JSON-LD:
 
-* Tool pages — `SoftwareApplication`, `BreadcrumbList`, `FAQPage`, `HowTo`
-* Category hubs and `/all-tools` — `CollectionPage` + `ItemList`, `BreadcrumbList`
-* Homepage — `Organization`, `WebSite` with `SearchAction`, category `ItemList`
+* Tool pages - `SoftwareApplication`, `BreadcrumbList`, `FAQPage`, `HowTo`
+* Category hubs and `/all-tools` - `CollectionPage` + `ItemList`, `BreadcrumbList`
+* Homepage - `Organization`, `WebSite` with `SearchAction`, category `ItemList`
 
 No `aggregateRating` is emitted: there are no real ratings to report, and fabricating them is both dishonest and a spam signal.
 
@@ -80,7 +80,7 @@ No `aggregateRating` is emitted: there are no real ratings to report, and fabric
 
 * Canonical path is `/s/<slug>`.
 * The root-level `/<slug>` route is retained so links created before the move keep working.
-* A miss on either path calls `notFound()` and returns a genuine **404**. Do not add a `loading.tsx` to these routes — it makes the response stream, and a streamed response cannot set a 404 status.
+* A miss on either path calls `notFound()` and returns a genuine **404**. Do not add a `loading.tsx` to these routes - it makes the response stream, and a streamed response cannot set a 404 status.
 * Destinations are validated in `src/lib/url-safety.ts` (scheme allow-list, private/loopback host blocking, no credentials in URL, no self-referencing loops).
 * Creation is rate limited to 12 links per hour per client via `src/lib/rate-limit.ts`, backed by MongoDB so the limit holds across serverless instances.
 * Slug uniqueness is enforced by a unique index, not a check-then-write.
@@ -88,7 +88,7 @@ No `aggregateRating` is emitted: there are no real ratings to report, and fabric
 
 ### Loading states
 
-There is deliberately **no root `loading.tsx`**. Nearly every route is statically prerendered, so there is no wait to fill — a root loading boundary made React stream a Suspense placeholder and shipped ~32 skeleton nodes inside every page's HTML. Use the primitives in `src/components/Skeleton.tsx` for genuine waits instead (work a tool performs after interaction, or a route that queries the database).
+There is deliberately **no root `loading.tsx`**. Nearly every route is statically prerendered, so there is no wait to fill - a root loading boundary made React stream a Suspense placeholder and shipped ~32 skeleton nodes inside every page's HTML. Use the primitives in `src/components/Skeleton.tsx` for genuine waits instead (work a tool performs after interaction, or a route that queries the database).
 
 ---
 
@@ -135,4 +135,4 @@ npm run lint    # eslint
 
 * **Ownership:** ToolNagri is owned, operated and managed by **Ayodhya Serenity**. All rights reserved.
 * **Contact:** [info.ayodhyaserenity@gmail.com](mailto:info.ayodhyaserenity@gmail.com)
-* **Privacy:** Client-side tools process files inside the browser sandbox. No user-uploaded files, passwords or documents are transmitted to our servers. The URL shortener is the one exception — it stores the destination URL and a click count.
+* **Privacy:** Client-side tools process files inside the browser sandbox. No user-uploaded files, passwords or documents are transmitted to our servers. The URL shortener is the one exception - it stores the destination URL and a click count.
