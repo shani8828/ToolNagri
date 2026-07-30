@@ -1,37 +1,71 @@
-import type { Metadata } from "next";
-import { GoogleTagManager, GoogleAnalytics } from "@next/third-parties/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Outfit } from "next/font/google";
+import { GoogleTagManager } from "@next/third-parties/google";
+
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
+/**
+ * Self-hosted via next/font: the previous `@import url(fonts.googleapis.com)`
+ * in globals.css was a render-blocking request to a third-party origin on
+ * every page load. These are subset, preloaded and served from our own domain.
+ */
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-outfit",
+});
+
+/**
+ * Site-wide defaults only.
+ *
+ * Deliberately no `alternates.canonical` here. Setting one at the root meant
+ * every child route inherited the homepage canonical and declared itself a
+ * duplicate. Each route now supplies its own via `pageMetadata()`, so a route
+ * that forgets simply has no canonical — recoverable — instead of the wrong one.
+ */
 export const metadata: Metadata = {
-  title: "ToolNagri | Premium Online Tools by Ayodhya Serenity",
-  description: "A fast, free, and premium collection of web tools for developers, designers, writers, and digital professionals. Fully client-side processing, secure and lightweight.",
-  metadataBase: new URL("https://toolnagri.vercel.app"),
-  alternates: {
-    canonical: "/",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} — Free Online Tools That Run in Your Browser`,
+    template: `%s | ${SITE_NAME}`,
   },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  referrer: "strict-origin-when-cross-origin",
+  formatDetection: { telephone: false, address: false, email: false },
   icons: {
-    icon: "/brandings/Logo-bgless.png",
+    icon: [{ url: "/brandings/Logo-bgless.png", type: "image/png" }],
     shortcut: "/brandings/Logo-bgless.png",
     apple: "/brandings/Logo-bgless.png",
   },
-  openGraph: {
-    title: "ToolNagri | Premium Online Tools Suite",
-    description: "Access high-performance developer tools, converters, calculators, and builders on a fast, clean, and ad-free platform.",
-    url: "https://toolnagri.vercel.app",
-    siteName: "ToolNagri",
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "ToolNagri | Premium Online Tools",
-    description: "Premium developer utilities, converters, calculators, and image compressors, hosted free on Vercel.",
-  },
+  manifest: "/manifest.webmanifest",
+  /*
+    No `robots` block here. index/follow is already the default, and declaring
+    it at the root stamped "index, follow" onto the 404 page alongside the
+    "noindex" Next.js adds for a 404 status — two contradictory directives on
+    one page. Indexable routes opt in through `pageMetadata()` instead.
+  */
   verification: {
     google: "QbR9SUSpfND1I45D258mIR6etoJOu7xKMMaBA3l214A",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -42,17 +76,30 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className="h-full antialiased"
+      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      {/*
+        GTM only. GoogleAnalytics was previously loaded alongside it, which
+        fired two tag libraries for one job. Configure the GA4 tag inside the
+        GTM container instead.
+      */}
       <GoogleTagManager gtmId="GTM-NVFJK2H3" />
-      <body className="min-h-full flex flex-col bg-background text-foreground animate-none">
+      <body
+        className="min-h-full flex flex-col bg-background text-foreground"
+        suppressHydrationWarning
+      >
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-lg focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-background"
+        >
+          Skip to content
+        </a>
         <Header />
-        <main className="flex-1 w-full bg-background">
+        <main id="main" className="flex-1 w-full bg-background">
           {children}
         </main>
         <Footer />
-        <GoogleAnalytics gaId="G-PD4S5R1Q8P" />
       </body>
     </html>
   );

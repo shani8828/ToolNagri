@@ -1,117 +1,122 @@
 import Link from "next/link";
-import { Wrench, Mail, ExternalLink } from "lucide-react";
 
+import { CATEGORIES } from "@/lib/categories";
+import { POPULAR_TOOLS, TOOLS, toolsInCategory } from "@/lib/tools";
+import { CONTACT_EMAIL, ORG_NAME, ORG_URL, SITE_NAME } from "@/lib/site";
+
+/**
+ * Server component — no client JS. The category links here previously pointed
+ * at homepage anchors (/#calculators) that no longer existed; they now target
+ * the real hub pages, which also spreads internal link equity across them.
+ */
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-border-color bg-secondary-bg py-12 md:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand Info */}
-          <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2 group">
-              <span className="font-heading text-lg font-bold tracking-tight text-primary-text">
-                Tool<span className="text-accent">Nagri</span>
-              </span>
+    <footer className="mt-auto w-full border-t border-border-color bg-secondary-bg">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:grid-cols-6">
+          {/* Brand */}
+          <div className="col-span-2">
+            <Link
+              href="/"
+              className="font-heading text-[17px] font-bold tracking-tight text-primary-text"
+            >
+              Tool<span className="text-secondary-text">Nagri</span>
             </Link>
-            <p className="text-sm text-secondary-text leading-relaxed">
-              A premium, lightning-fast utility platform hosting modern online tools for developers, creators, and individuals. Safe, client-side first, and entirely free.
-            </p>
-            <div className="flex items-center gap-2 text-sm text-secondary-text">
-              <Mail className="h-4 w-4" />
-              <a href="mailto:info.ayodhyaserenity@gmail.com" className="hover:text-accent transition-colors">
-                info.ayodhyaserenity@gmail.com
-              </a>
-            </div>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h3 className="font-heading text-sm font-semibold text-primary-text uppercase tracking-wider mb-4">
-              Categories
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/#calculators" className="text-sm text-secondary-text hover:text-accent transition-colors">
-                  Calculators
-                </Link>
-              </li>
-              <li>
-                <Link href="/#pdf-image" className="text-sm text-secondary-text hover:text-accent transition-colors">
-                  Image & PDF Tools
-                </Link>
-              </li>
-              <li>
-                <Link href="/#developer" className="text-sm text-secondary-text hover:text-accent transition-colors">
-                  Developer Utilities
-                </Link>
-              </li>
-              <li>
-                <Link href="/#social-seo" className="text-sm text-secondary-text hover:text-accent transition-colors">
-                  Social & SEO Helpers
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal Pages */}
-          <div>
-            <h3 className="font-heading text-sm font-semibold text-primary-text uppercase tracking-wider mb-4">
-              Legal Info
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/privacy" className="text-sm text-secondary-text hover:text-accent transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="text-sm text-secondary-text hover:text-accent transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/disclaimer" className="text-sm text-secondary-text hover:text-accent transition-colors">
-                  Disclaimer
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-sm text-secondary-text hover:text-accent transition-colors">
-                  Contact Support
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Corporate / Ownership */}
-          <div>
-            <h3 className="font-heading text-sm font-semibold text-primary-text uppercase tracking-wider mb-4">
-              Ayodhya Serenity
-            </h3>
-            <p className="text-sm text-secondary-text leading-relaxed mb-4">
-              ToolNagri is a product of Ayodhya Serenity. We specialize in building fast, secure, and user-centric web platforms.
+            <p className="mt-3 max-w-xs text-[13px] leading-relaxed text-secondary-text">
+              {TOOLS.length} free online tools that run entirely in your browser. No signup, no
+              uploads, no file limits.
             </p>
             <a
-              href="https://ayodhyaserenity.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent-light transition-colors"
+              href={`mailto:${CONTACT_EMAIL}`}
+              className="mt-4 inline-block text-[13px] text-secondary-text underline-offset-4 hover:text-primary-text hover:underline"
             >
-              Visit Ayodhya Serenity
-              <ExternalLink className="h-3.5 w-3.5" />
+              {CONTACT_EMAIL}
             </a>
           </div>
+
+          {/* Categories — split across two columns */}
+          <FooterColumn title="Categories">
+            {CATEGORIES.slice(0, 4).map((category) => (
+              <FooterLink key={category.slug} href={`/tools/${category.slug}`}>
+                {category.label}
+                <span className="ml-1 text-secondary-text/60">
+                  {toolsInCategory(category.slug).length}
+                </span>
+              </FooterLink>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title="More tools">
+            {CATEGORIES.slice(4).map((category) => (
+              <FooterLink key={category.slug} href={`/tools/${category.slug}`}>
+                {category.label}
+                <span className="ml-1 text-secondary-text/60">
+                  {toolsInCategory(category.slug).length}
+                </span>
+              </FooterLink>
+            ))}
+            <FooterLink href="/all-tools">All tools</FooterLink>
+          </FooterColumn>
+
+          {/* Popular */}
+          <FooterColumn title="Popular">
+            {POPULAR_TOOLS.slice(0, 6).map((tool) => (
+              <FooterLink key={tool.slug} href={`/${tool.slug}`}>
+                {tool.name}
+              </FooterLink>
+            ))}
+          </FooterColumn>
+
+          {/* Legal — moved out of the header, where it was taking up prime space */}
+          <FooterColumn title="Legal">
+            <FooterLink href="/privacy">Privacy Policy</FooterLink>
+            <FooterLink href="/terms">Terms of Service</FooterLink>
+            <FooterLink href="/disclaimer">Disclaimer</FooterLink>
+            <FooterLink href="/contact">Contact</FooterLink>
+          </FooterColumn>
         </div>
 
-        {/* Legal Disclaimer / Copyright */}
-        <div className="mt-12 border-t border-border-color pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-          <p className="text-xs text-secondary-text">
-            © {new Date().getFullYear()} ToolNagri. All rights reserved.
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border-color pt-6 text-center sm:flex-row sm:text-left">
+          <p className="text-[12px] text-secondary-text">
+            © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
           </p>
-          <p className="text-xs text-secondary-text font-medium">
-            Owned, operated & managed by <Link href="https://ayodhyaserenity.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:text-accent transition-colors">Ayodhya Serenity.</Link>
+          <p className="text-[12px] text-secondary-text">
+            A product of{" "}
+            <a
+              href={ORG_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline-offset-4 hover:text-primary-text hover:underline"
+            >
+              {ORG_NAME}
+            </a>
           </p>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <h3 className="font-heading text-[11px] font-bold uppercase tracking-wider text-primary-text">
+        {title}
+      </h3>
+      <ul className="mt-4 space-y-2.5">{children}</ul>
+    </div>
+  );
+}
+
+function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <li>
+      <Link
+        href={href}
+        className="text-[13px] text-secondary-text underline-offset-4 transition-colors hover:text-primary-text hover:underline"
+      >
+        {children}
+      </Link>
+    </li>
   );
 }

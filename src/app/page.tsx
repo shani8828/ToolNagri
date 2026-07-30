@@ -1,369 +1,235 @@
-"use client";
-
-import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search,
-  Sparkles,
   ArrowRight,
+  Calculator,
+  Code2,
+  FileText,
+  Image as ImageIcon,
+  Shield,
   TrendingUp,
-  Clock,
-  ShieldCheck,
+  Type,
   Zap,
-  DollarSign,
-  Info
 } from "lucide-react";
 
-import { ALL_TOOLS } from "@/lib/tools";
+import ToolCard from "@/components/ToolCard";
+import SearchTrigger from "@/components/SearchTrigger";
+import { CATEGORIES, type CategorySlug } from "@/lib/categories";
+import { POPULAR_TOOLS, TOOLS, toolsInCategory } from "@/lib/tools";
+import { homeJsonLd, pageMetadata } from "@/lib/seo";
+import { SITE_DESCRIPTION } from "@/lib/site";
 
-const CATEGORIES = [
-  "All",
-  "Calculators",
-  "Image Tools",
-  "PDF Tools",
-  "Developer Tools",
-  "Text Tools",
-  "Utility Tools",
-  "SEO Tools",
-  "Social Tools",
-];
+/**
+ * The homepage owns its own metadata rather than inheriting it from the root
+ * layout. That keeps the root free of a canonical URL, so no child route can
+ * accidentally inherit "/" as its canonical the way all 42 tool pages did.
+ */
+export const metadata = pageMetadata({
+  title: "Free Online Tools — PDF, Image, Text & Developer Utilities",
+  description: SITE_DESCRIPTION,
+  path: "/",
+  keywords: [
+    "free online tools",
+    "online utilities",
+    "browser tools",
+    "free web tools no signup",
+  ],
+});
+
+const CATEGORY_ICONS: Record<CategorySlug, typeof FileText> = {
+  pdf: FileText,
+  image: ImageIcon,
+  text: Type,
+  developer: Code2,
+  calculators: Calculator,
+  seo: TrendingUp,
+  network: Shield,
+};
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // Keyboard shortcut Ctrl+K to focus search input
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-      }
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
-  // Filter tools based on search and category
-  const filteredTools = ALL_TOOLS.filter((tool) => {
-    const matchesSearch =
-      tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tool.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      tool.category.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesCategory =
-      selectedCategory === "All" || tool.category === selectedCategory;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  const popularTools = ALL_TOOLS.filter((t) => t.isPopular);
-  const trendingTools = ALL_TOOLS.filter((t) => t.isTrending);
-  const newTools = ALL_TOOLS.filter((t) => t.isNew);
-
   return (
-    <div className="min-h-screen bg-background relative overflow-hidden">
-      
-      {/* Background radial highlight */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[450px] bg-[radial-gradient(ellipse_at_top,var(--color-accent-light)/10,transparent_50%)] pointer-events-none -z-10" />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: homeJsonLd() }}
+      />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24 space-y-16">
-        
-        {/* SECTION 1: Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center space-y-4 max-w-3xl mx-auto"
-        >
-          <span className="inline-flex items-center rounded-full bg-accent/10 px-3.5 py-1 text-xs font-semibold text-accent ring-1 ring-inset ring-accent/20">
-            Product by Ayodhya Serenity
-          </span>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight text-primary-text leading-none">
-            What would you like to do today?
-          </h1>
-          <p className="text-base sm:text-lg text-secondary-text max-w-xl mx-auto leading-relaxed">
-            Free, premium online tools engineered to process 100% locally in your browser. Speed up workflows securely with zero conversions limit.
-          </p>
-        </motion.div>
+      {/* ───────────────────────────── Hero ───────────────────────────── */}
+      <section className="border-b border-border-color overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Column: Title and Search/Links */}
+            <div className="animate-fade-up lg:col-span-7">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-border-color bg-secondary-bg px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary-text">
+                <Zap aria-hidden className="h-3 w-3" />
+                {TOOLS.length} tools · no signup
+              </span>
 
-        {/* SECTION 2: Search and Category Filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.1 }}
-          className="max-w-2xl mx-auto space-y-6"
-          id="search"
-        >
-          {/* Search bar */}
-          <div className="relative rounded-2xl shadow-premium border border-border-color bg-white p-1.5 flex items-center gap-2">
-            <div className="pl-3.5 text-secondary-text">
-              <Search className="h-5 w-5" />
+              <h1 className="mt-5 font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-primary-text sm:text-5xl lg:text-6xl">
+                Free online tools that run
+                <br className="hidden sm:block" /> entirely in your browser
+              </h1>
+
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-secondary-text md:text-lg">
+                Merge PDFs, compress images, format JSON, generate QR codes and calculate loan EMIs
+                — {TOOLS.length} utilities that process your files locally. Nothing is uploaded,
+                nothing is stored, and there are no limits or accounts.
+              </p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <SearchTrigger className="w-full sm:w-80" />
+                <Link
+                  href="/all-tools"
+                  className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-accent px-5 py-3 text-[14px] font-semibold text-background transition-colors hover:bg-accent-light"
+                >
+                  Browse all tools
+                  <ArrowRight aria-hidden className="h-4 w-4" />
+                </Link>
+              </div>
             </div>
-            <input
-              type="text"
-              ref={searchInputRef}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search tools... (Press Ctrl+K)"
-              className="w-full py-3 bg-transparent text-primary-text placeholder-secondary-text focus:outline-none text-sm md:text-base font-medium"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="text-xs font-semibold hover:text-primary-text text-secondary-text px-3 py-1 cursor-pointer"
-              >
-                Clear
-              </button>
-            )}
+
+            {/* Right Column: Storyset Illustration */}
+            <div className="animate-fade-in lg:col-span-5 flex flex-col items-center justify-center">
+              <div className="relative w-full max-w-md lg:max-w-none aspect-3/2 flex items-center justify-center">
+                <img
+                  src="/ecotourism-rafiki.svg"
+                  alt="Web tools illustration by Storyset"
+                  className="w-full h-auto object-contain max-h-80 sm:max-h-95 lg:max-h-110"
+                />
+              </div>
+              {/* <span className="mt-4 text-[11px] text-secondary-text/60">
+                <a
+                  href="https://storyset.com/people"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-primary-text hover:underline"
+                >
+                  People illustrations by Storyset
+                </a>
+              </span> */}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────── Browse by category ─────────────────────── */}
+      <section className="border-b border-border-color bg-secondary-bg/40">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+          <div className="flex items-baseline justify-between gap-4">
+            <div>
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-primary-text md:text-3xl">
+                Browse by category
+              </h2>
+              <p className="mt-2 text-[14px] text-secondary-text">
+                Seven collections covering documents, media, code and everyday maths.
+              </p>
+            </div>
           </div>
 
-          {/* Category filter pills */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5" id="categories">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-all duration-200 cursor-pointer ${
-                  selectedCategory === cat
-                    ? "bg-primary-text text-white shadow-sm"
-                    : "border border-border-color bg-background text-secondary-text hover:bg-hover-bg hover:text-primary-text"
-                }`}
-              >
-                {cat}
-              </button>
+          <div className="stagger mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {CATEGORIES.map((category) => {
+              const Icon = CATEGORY_ICONS[category.slug];
+              const tools = toolsInCategory(category.slug);
+
+              return (
+                <Link
+                  key={category.slug}
+                  href={`/tools/${category.slug}`}
+                  className="group flex flex-col rounded-2xl border border-border-color bg-card-bg p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-secondary-text/30 hover:shadow-card-hover"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-border-color bg-secondary-bg text-primary-text transition-colors duration-200 group-hover:bg-primary-text group-hover:text-background">
+                      <Icon aria-hidden className="h-4.5 w-4.5" />
+                    </span>
+                    <span className="text-[12px] font-medium text-secondary-text">
+                      {tools.length} tools
+                    </span>
+                  </div>
+
+                  <h3 className="mt-4 font-heading text-[16px] font-bold text-primary-text">
+                    {category.label}
+                  </h3>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-secondary-text">
+                    {category.tagline}
+                  </p>
+
+                  <p className="mt-4 line-clamp-1 text-[12px] text-secondary-text/70">
+                    {tools
+                      .slice(0, 4)
+                      .map((t) => t.name)
+                      .join(" · ")}
+                  </p>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ──────────────────────── Popular tools ─────────────────────────── */}
+      <section className="border-b border-border-color">
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+          <div className="flex items-baseline justify-between gap-4">
+            <h2 className="font-heading text-2xl font-bold tracking-tight text-primary-text md:text-3xl">
+              Most used
+            </h2>
+            <Link
+              href="/all-tools"
+              className="shrink-0 text-[13px] font-semibold text-secondary-text underline-offset-4 hover:text-primary-text hover:underline"
+            >
+              View all {TOOLS.length} →
+            </Link>
+          </div>
+
+          <div className="stagger mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {POPULAR_TOOLS.slice(0, 8).map((tool) => (
+              <ToolCard key={tool.slug} tool={tool} />
             ))}
           </div>
-        </motion.div>
-
-        {/* Dynamic Grid Results */}
-        <div className="space-y-6">
-          {searchQuery || selectedCategory !== "All" ? (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="font-heading text-xl font-bold text-primary-text">
-                  Search Results ({filteredTools.length})
-                </h2>
-              </div>
-              
-              {filteredTools.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-border-color p-12 text-center text-sm text-secondary-text bg-secondary-bg/50">
-                  <Info className="h-8 w-8 text-secondary-text/30 mx-auto mb-3" />
-                  <p className="font-semibold text-primary-text">No tools found matching your criteria</p>
-                  <p className="text-xs mt-1">Try entering another keyword or clearing category filters.</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredTools.map((tool) => {
-                    const Icon = tool.icon;
-                    return (
-                      <Link
-                        key={tool.name}
-                        href={tool.url}
-                        className="group flex flex-col justify-between p-6 rounded-2xl border border-border-color bg-card-bg shadow-card hover:shadow-card-hover hover:border-accent/40 transition-all duration-300"
-                      >
-                        <div className="space-y-3">
-                          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent group-hover:scale-105 transition-transform">
-                            <Icon className="h-5 w-5" />
-                          </span>
-                          <h3 className="font-heading text-lg font-bold text-primary-text group-hover:text-accent transition-colors flex items-center gap-1.5">
-                            {tool.name}
-                          </h3>
-                          <p className="text-sm text-secondary-text leading-relaxed">
-                            {tool.description}
-                          </p>
-                        </div>
-                        <div className="mt-5 pt-3 border-t border-border-color/40 flex items-center justify-between text-xs font-semibold text-secondary-text group-hover:text-accent">
-                          <span className="bg-secondary-bg px-2.5 py-0.5 rounded-full border border-border-color/30">
-                            {tool.category}
-                          </span>
-                          <span className="inline-flex items-center gap-1">
-                            Launch Tool <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
-                          </span>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          ) : (
-            /* SECTION 3: Standard Page Layout (Curated Sections) */
-            <div className="space-y-16">
-              
-              {/* Popular Tools */}
-              <div className="space-y-6" id="popular">
-                <div className="flex items-center gap-2 border-b border-border-color/60 pb-3">
-                  <Sparkles className="h-5 w-5 text-accent" />
-                  <h2 className="font-heading text-2xl font-bold text-primary-text">Popular Utilities</h2>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {popularTools.map((tool) => {
-                    const Icon = tool.icon;
-                    return (
-                      <Link
-                        key={tool.name}
-                        href={tool.url}
-                        className="group flex flex-col justify-between p-5 rounded-xl border border-border-color bg-card-bg shadow-card hover:shadow-card-hover hover:border-accent/40 hover:-translate-y-0.5 transition-all duration-300"
-                      >
-                        <div className="space-y-3">
-                          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                            <Icon className="h-4.5 w-4.5" />
-                          </span>
-                          <h3 className="font-heading text-base font-bold text-primary-text group-hover:text-accent transition-colors">
-                            {tool.name}
-                          </h3>
-                          <p className="text-xs text-secondary-text leading-relaxed line-clamp-2">
-                            {tool.description}
-                          </p>
-                        </div>
-                        <div className="mt-4 pt-3 border-t border-border-color/40 flex items-center justify-between text-[11px] font-semibold text-secondary-text">
-                          <span className="bg-secondary-bg px-2 py-0.5 rounded-full">
-                            {tool.category}
-                          </span>
-                          <ArrowRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform group-hover:text-accent" />
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Grid split for Trending & New */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                
-                {/* Trending Tools */}
-                <div className="space-y-6" id="trending">
-                  <div className="flex items-center gap-2 border-b border-border-color/60 pb-3">
-                    <TrendingUp className="h-5 w-5 text-accent" />
-                    <h2 className="font-heading text-xl font-bold text-primary-text">Trending This Week</h2>
-                  </div>
-                  <div className="space-y-4">
-                    {trendingTools.map((tool) => {
-                      const Icon = tool.icon;
-                      return (
-                        <Link
-                          key={tool.name}
-                          href={tool.url}
-                          className="group flex items-center gap-4 p-4 rounded-xl border border-border-color bg-card-bg hover:bg-hover-bg/30 transition-colors duration-200"
-                        >
-                          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary-bg group-hover:bg-accent/10 group-hover:text-accent text-secondary-text shrink-0 transition-colors">
-                            <Icon className="h-5 w-5" />
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <h3 className="font-heading text-sm font-semibold text-primary-text group-hover:text-accent transition-colors truncate">
-                              {tool.name}
-                            </h3>
-                            <p className="text-xs text-secondary-text truncate mt-0.5">{tool.description}</p>
-                          </div>
-                          <ArrowRight className="h-4 w-4 text-secondary-text/30 group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* New Tools */}
-                <div className="space-y-6" id="new">
-                  <div className="flex items-center gap-2 border-b border-border-color/60 pb-3">
-                    <Clock className="h-5 w-5 text-accent" />
-                    <h2 className="font-heading text-xl font-bold text-primary-text">Recently Added</h2>
-                  </div>
-                  <div className="space-y-4">
-                    {newTools.map((tool) => {
-                      const Icon = tool.icon;
-                      return (
-                        <Link
-                          key={tool.name}
-                          href={tool.url}
-                          className="group flex items-center gap-4 p-4 rounded-xl border border-border-color bg-card-bg hover:bg-hover-bg/30 transition-colors duration-200"
-                        >
-                          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary-bg group-hover:bg-accent/10 group-hover:text-accent text-secondary-text shrink-0 transition-colors">
-                            <Icon className="h-5 w-5" />
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <h3 className="font-heading text-sm font-semibold text-primary-text group-hover:text-accent transition-colors truncate">
-                              {tool.name}
-                            </h3>
-                            <p className="text-xs text-secondary-text truncate mt-0.5">{tool.description}</p>
-                          </div>
-                          <ArrowRight className="h-4 w-4 text-secondary-text/30 group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0" />
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-          )}
         </div>
+      </section>
 
-        {/* SECTION 7: Why ToolNagri */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="border-t border-border-color pt-16 space-y-10"
-        >
-          <div className="text-center space-y-2">
-            <h2 className="font-heading text-2xl md:text-3xl font-bold text-primary-text">
-              Secure, Fast, Offline-First Utilities
-            </h2>
-            <p className="text-sm text-secondary-text max-w-lg mx-auto">
-              How ToolNagri keeps your daily development workflows private and responsive.
-            </p>
-          </div>
+      {/* ─────────────────────────── Why ────────────────────────────────── */}
+      <section>
+        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 md:py-20 lg:px-8">
+          <h2 className="font-heading text-2xl font-bold tracking-tight text-primary-text md:text-3xl">
+            Why these tools are different
+          </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="rounded-xl border border-border-color p-5 bg-card-bg hover:shadow-premium transition-shadow">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-success/10 text-success mb-4">
-                <ShieldCheck className="h-5 w-5" />
-              </span>
-              <h3 className="font-heading font-bold text-sm text-primary-text mb-1.5">100% Client-Side Privacy</h3>
-              <p className="text-xs text-secondary-text leading-relaxed">
-                Images, text structures, and code strings are processed inside your browser canvas. No server uploads.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-border-color p-5 bg-card-bg hover:shadow-premium transition-shadow">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent mb-4">
-                <Zap className="h-5 w-5" />
-              </span>
-              <h3 className="font-heading font-bold text-sm text-primary-text mb-1.5">Instant Execution</h3>
-              <p className="text-xs text-secondary-text leading-relaxed">
-                Powered by React and browser API standards. Zero round-trip latency for calculations and conversions.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-border-color p-5 bg-card-bg hover:shadow-premium transition-shadow">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 mb-4">
-                <DollarSign className="h-5 w-5" />
-              </span>
-              <h3 className="font-heading font-bold text-sm text-primary-text mb-1.5">Completely Free</h3>
-              <p className="text-xs text-secondary-text leading-relaxed">
-                No daily file limits, no captcha obstacles, and no subscriptions. Simple ad-free tool suite.
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-border-color p-5 bg-card-bg hover:shadow-premium transition-shadow">
-              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-500/10 text-indigo-500 mb-4">
-                <Sparkles className="h-5 w-5" />
-              </span>
-              <h3 className="font-heading font-bold text-sm text-primary-text mb-1.5">Premium UX Aesthetics</h3>
-              <p className="text-xs text-secondary-text leading-relaxed">
-                Light theme layout inspired by Stripe and Notion. Large whitespace, micro-animations, and clean typography.
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
-      </div>
-    </div>
+          <dl className="mt-8 grid grid-cols-1 gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                term: "Your files never leave",
+                detail:
+                  "PDFs, images and text are processed by your own browser. There is no upload step, so there is no copy of your data on a server to leak or subpoena.",
+              },
+              {
+                term: "No round trip, no wait",
+                detail:
+                  "Because the work happens locally, results appear immediately. No queue, no progress bar waiting on someone else's server.",
+              },
+              {
+                term: "No accounts or limits",
+                detail:
+                  "No signup wall, no daily conversion cap, no watermark on the output and no email address required to download your own file.",
+              },
+              {
+                term: "Works offline",
+                detail:
+                  "Once a tool page has loaded, most tools keep working without a connection. Handy on planes, trains and bad hotel Wi-Fi.",
+              },
+            ].map((item) => (
+              <div key={item.term}>
+                <dt className="font-heading text-[15px] font-bold text-primary-text">
+                  {item.term}
+                </dt>
+                <dd className="mt-2 text-[13px] leading-relaxed text-secondary-text">
+                  {item.detail}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+    </>
   );
 }

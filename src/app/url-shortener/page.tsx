@@ -84,7 +84,9 @@ export default function UrlShortener() {
 
     if (res.success && res.slug) {
       const host = window.location.origin;
-      const shortened = `${host}/${res.slug}`;
+      // /s/ namespace — keeps the root free for real pages so unknown URLs can
+      // return a genuine 404 instead of being treated as short links.
+      const shortened = `${host}/s/${res.slug}`;
       setResult({ shortUrl: shortened, slug: res.slug });
 
       // Save to localStorage
@@ -414,12 +416,12 @@ export default function UrlShortener() {
                       <tr key={link.slug} className="hover:bg-hover-bg transition-colors">
                         <td className="px-4 py-3.5 font-medium text-primary-text">
                           <a
-                            href={`/${link.slug}`}
+                            href={`/s/${link.slug}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:underline text-accent flex items-center gap-1.5"
                           >
-                            /{link.slug}
+                            /s/{link.slug}
                           </a>
                         </td>
                         <td className="px-4 py-3.5 text-secondary-text hidden sm:table-cell max-w-xs truncate">
@@ -446,7 +448,7 @@ export default function UrlShortener() {
                         </td>
                         <td className="px-4 py-3.5 text-right space-x-2">
                           <button
-                            onClick={() => handleCopy(`${window.location.origin}/${link.slug}`)}
+                            onClick={() => handleCopy(`${window.location.origin}/s/${link.slug}`)}
                             className="p-1 hover:text-accent text-secondary-text rounded transition-colors cursor-pointer"
                             title="Copy link"
                           >

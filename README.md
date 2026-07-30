@@ -1,109 +1,138 @@
 # 🛠️ ToolNagri
 
-> **ToolNagri** is a modern, premium, and SEO-focused utility platform offering a suite of lightweight, ultra-fast, and privacy-first online tools. Designed with a clean, Notion-Light, Stripe-Documentation, and Apple-inspired aesthetic, ToolNagri performs computations client-side whenever possible for instantaneous execution and high data privacy.
+> **ToolNagri** is a suite of 42 free online utilities that run entirely in the visitor's browser. No signup, no uploads, no file limits. Built for speed, privacy and search visibility.
 >
-> 🌐 **Live Website:** [toolnagri.vercel.app](https://toolnagri.vercel.app)
+> 🌐 **Live:** [toolnagri.vercel.app](https://toolnagri.vercel.app)
 > 🏢 **Parent Organization:** [Ayodhya Serenity](https://ayodhyaserenity.vercel.app)
 
 ---
 
-## 🎨 Design Philosophy
-* **Bright & Premium Aesthetic:** Elegant light mode utilizing high-contrast typography, harmonized pastel accents, subtle border shadows, and a clean white background.
-* **Micro-Animations:** Fluid state transitions, hover effects, and spring animations powered by **Framer Motion**.
-* **Privacy-First:** Operations (e.g. image compression, PDF merging, password generation) are executed completely in the user's browser. Your sensitive files and data never touch a backend server.
-* **Fully Responsive:** Mobile-first fluid layouts engineered to adapt perfectly from 320px mobile screens up to 4K ultra-wide monitors.
+## 🎨 Design Principles
+
+* **Neutral by default.** White, black and gray carry the interface; colour is reserved for meaning (success, warning, danger), not decoration.
+* **Privacy-first.** Image, PDF and text tools use browser APIs (Canvas, `pdf-lib`, `qrcode`). Files are never uploaded, so there is no server-side copy to leak.
+* **Cheap motion.** Entrance and hover effects are CSS keyframes. No animation library ships to the client.
+* **Responsive from 320px.** Verified with no horizontal overflow at mobile, tablet and desktop widths.
+* **Reduced-motion aware.** Animations collapse to their end state when the OS requests it.
 
 ---
 
-## 🛠️ The Tool Directory (16+ Utilities)
+## 🗂️ Tool Catalogue
 
-ToolNagri offers a comprehensive suite of utilities organized into four functional groups:
+42 tools across 7 categories. Every category has an indexable hub page at `/tools/<slug>`.
 
-### 💻 Developer Utilities
-| Tool | Description | Processing |
-| :--- | :--- | :--- |
-| **[URL Shortener](https://toolnagri.vercel.app/url-shortener)** | Custom short link generator with target validation. | 🗄️ MongoDB DB Redirection |
-| **[JSON Formatter](https://toolnagri.vercel.app/json-formatter)** | Validate, prettify, parse, minify, and copy JSON structures. | ⚡ Client-Side |
-| **[Base64 Encoder/Decoder](https://toolnagri.vercel.app/base64)** | Instantly convert text or files to/from Base64 encoding. | ⚡ Client-Side |
-| **[UTM Campaign Builder](https://toolnagri.vercel.app/utm-builder)** | Standardize and generate trackable UTM parameters for marketing. | ⚡ Client-Side |
+| Category | Hub | Tools |
+| :--- | :--- | ---: |
+| PDF Tools | `/tools/pdf` | 6 |
+| Image Tools | `/tools/image` | 5 |
+| Text Tools | `/tools/text` | 6 |
+| Developer Tools | `/tools/developer` | 12 |
+| Calculators & Converters | `/tools/calculators` | 5 |
+| SEO & Marketing Tools | `/tools/seo` | 5 |
+| Network & Security Tools | `/tools/network` | 3 |
 
-### 🖼️ Image & Document Tools
-| Tool | Description | Processing |
-| :--- | :--- | :--- |
-| **[Image Compressor](https://toolnagri.vercel.app/image-compressor)** | Compress JPG, PNG, and WebP files with adjustable quality factors. | ⚡ Client-Side (Canvas) |
-| **[JPG to WebP Converter](https://toolnagri.vercel.app/jpg-to-webp)** | Convert heavy legacy images to modern, high-performance WebP. | ⚡ Client-Side (Canvas) |
-| **[PDF Merger](https://toolnagri.vercel.app/pdf-merge)** | Combine multiple PDF files into one clean document with custom order. | ⚡ Client-Side (`pdf-lib`) |
-| **[YouTube Thumbnail Downloader](https://toolnagri.vercel.app/youtube-thumbnail)** | Extract high-resolution YouTube video cover images. | ⚡ Client-Side |
-
-### 📐 Calculations & Finance
-| Tool | Description | Processing |
-| :--- | :--- | :--- |
-| **[EMI Loan Calculator](https://toolnagri.vercel.app/emi-calculator)** | Calculate monthly installments, total interest, and amortization graphs. | ⚡ Client-Side |
-| **[Age Calculator](https://toolnagri.vercel.app/age-calculator)** | Calculate exact age in years, months, days, minutes, and seconds. | ⚡ Client-Side |
-| **[Unit Converter](https://toolnagri.vercel.app/unit-converter)** | Real-time unit conversions for Length, Weight, Temperature, and Area. | ⚡ Client-Side |
-| **[Time Zone Converter](https://toolnagri.vercel.app/timezone-converter)** | Convert base date/time across multiple global target timezones. | ⚡ Client-Side |
-
-### ✍️ Generators & Editors
-| Tool | Description | Processing |
-| :--- | :--- | :--- |
-| **[QR Code Generator](https://toolnagri.vercel.app/qr-generator)** | Generate customizable, downloadable vector QR codes. | ⚡ Client-Side (`qrcode`) |
-| **[Password Generator](https://toolnagri.vercel.app/password-generator)** | Generate cryptographically secure passwords with custom criteria. | ⚡ Client-Side |
-| **[Word Counter](https://toolnagri.vercel.app/word-counter)** | Real-time text analysis displaying word count, reading times, and density. | ⚡ Client-Side |
-| **[Character Counter](https://toolnagri.vercel.app/character-counter)** | Detailed character limits, letter frequency, and space analytics. | ⚡ Client-Side |
+The full list is at [`/all-tools`](https://toolnagri.vercel.app/all-tools).
 
 ---
 
-## ⚡ Tech Stack & Architecture
+## ⚡ Tech Stack
 
-* **Framework:** Next.js 16 (App Router) for hybrid static/dynamic generation.
-* **Language:** TypeScript for type safety and clean interfaces.
-* **Styling:** Tailwind CSS v4 utilizing CSS variables (`var(--color-accent)`) and utility classes.
-* **Animations:** Framer Motion for smooth interface micro-interactions.
-* **Database:** MongoDB Atlas (native driver) powering the URL Shortener lookup.
-* **Icons:** Lucide React for consistent line-art icons.
-* **SEO & Metadata:** Custom dynamic `sitemap.ts` and `robots.ts` to maximize search engine indexing and domain authority.
+* **Framework:** Next.js 16 (App Router), statically prerendered wherever possible
+* **Language:** TypeScript
+* **Styling:** Tailwind CSS v4 with CSS custom properties
+* **Database:** MongoDB Atlas — used only by the URL shortener
+* **Icons:** Lucide React
+* **Analytics:** Google Tag Manager (configure the GA4 tag inside the container)
+
+---
+
+## 🧭 Architecture Notes
+
+### The catalogue is the single source of truth
+
+`src/lib/tools.ts` holds every tool's slug, category, SEO title, description, keywords and content date. `src/lib/categories.ts` holds the taxonomy. Both are **pure data with no React imports**, so the sitemap, route handlers and server components can read them without pulling UI into the bundle. Icons are referenced by name and resolved through `src/lib/tool-icons.ts`.
+
+Anything derived from a tool — its category badge, breadcrumbs, related tools, sitemap entry, metadata — reads from here. A tool cannot disagree with the catalogue about which category it is in.
+
+### Metadata is generated, not hand-written
+
+Each tool route needs a server `layout.tsx` because its `page.tsx` is a client component and Next.js only reads `metadata` from server components. Those wrappers are generated:
+
+```bash
+node src/lib/generate-layouts.js
+```
+
+Re-run it after adding a tool to `tools.ts`. The generated files contain no copy of their own — they call `toolMetadata(slug)` in `src/lib/seo.ts`, which builds the title, description, canonical URL and Open Graph block from the catalogue.
+
+> **Why generated:** the root layout previously set `alternates.canonical: "/"`. Next.js merges metadata parent-to-child, so all 42 tool pages inherited it and declared themselves duplicates of the homepage. Routing every route's canonical through one helper makes that class of bug impossible to reintroduce quietly.
+
+### Structured data
+
+`src/lib/seo.ts` builds JSON-LD:
+
+* Tool pages — `SoftwareApplication`, `BreadcrumbList`, `FAQPage`, `HowTo`
+* Category hubs and `/all-tools` — `CollectionPage` + `ItemList`, `BreadcrumbList`
+* Homepage — `Organization`, `WebSite` with `SearchAction`, category `ItemList`
+
+No `aggregateRating` is emitted: there are no real ratings to report, and fabricating them is both dishonest and a spam signal.
+
+### URL shortener
+
+* Canonical path is `/s/<slug>`.
+* The root-level `/<slug>` route is retained so links created before the move keep working.
+* A miss on either path calls `notFound()` and returns a genuine **404**. Do not add a `loading.tsx` to these routes — it makes the response stream, and a streamed response cannot set a 404 status.
+* Destinations are validated in `src/lib/url-safety.ts` (scheme allow-list, private/loopback host blocking, no credentials in URL, no self-referencing loops).
+* Creation is rate limited to 12 links per hour per client via `src/lib/rate-limit.ts`, backed by MongoDB so the limit holds across serverless instances.
+* Slug uniqueness is enforced by a unique index, not a check-then-write.
+* Reserved slugs are derived from the catalogue, so a short link can never shadow a real page.
+
+### Loading states
+
+There is deliberately **no root `loading.tsx`**. Nearly every route is statically prerendered, so there is no wait to fill — a root loading boundary made React stream a Suspense placeholder and shipped ~32 skeleton nodes inside every page's HTML. Use the primitives in `src/components/Skeleton.tsx` for genuine waits instead (work a tool performs after interaction, or a route that queries the database).
 
 ---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-* Node.js (v18.x or later)
-* npm / yarn / pnpm
+
+* Node.js 18.18 or later
+* npm
 
 ### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/AyodhyaSerenity/ToolNagari.git
-   cd ToolNagari
-   ```
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+```bash
+git clone https://github.com/AyodhyaSerenity/ToolNagari.git
+cd ToolNagari
+npm install
+```
 
-3. Setup environment variables:
-   Create a `.env.local` file in the root directory:
-   ```env
-   MONGODB_URI=your_mongodb_atlas_connection_string
-   ```
+### Environment variables
 
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+Create `.env.local`:
 
-5. Build for production:
-   ```bash
-   npm run build
-   ```
+```env
+MONGODB_URI=your_mongodb_atlas_connection_string
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+`NEXT_PUBLIC_SITE_URL` drives canonical tags, OG URLs, the sitemap and JSON-LD.
+
+> ⚠️ **In production this must be the real public origin.** `src/lib/site.ts` refuses localhost values when `NODE_ENV === "production"` and falls back to the live domain, but set it correctly on Vercel rather than relying on that guard. When a custom domain is attached, update this one variable.
+
+### Commands
+
+```bash
+npm run dev     # development server
+npm run build   # production build
+npm start       # serve the production build
+npm run lint    # eslint
+```
 
 ---
 
 ## ⚖️ Legal & Branding
 
-* **Ownership:** ToolNagri is owned, operated, and managed by **Ayodhya Serenity**. All rights reserved.
-* **Contact Email:** [info.ayodhyaserenity@gmail.com](mailto:info.ayodhyaserenity@gmail.com)
-* **Privacy Assurance:** All processing for client-side tools occurs directly inside the client's browser sandbox. No user-uploaded files, passwords, or documents are transmitted to our servers.
+* **Ownership:** ToolNagri is owned, operated and managed by **Ayodhya Serenity**. All rights reserved.
+* **Contact:** [info.ayodhyaserenity@gmail.com](mailto:info.ayodhyaserenity@gmail.com)
+* **Privacy:** Client-side tools process files inside the browser sandbox. No user-uploaded files, passwords or documents are transmitted to our servers. The URL shortener is the one exception — it stores the destination URL and a click count.

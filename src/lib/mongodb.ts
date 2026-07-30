@@ -12,7 +12,6 @@ let clientPromise: Promise<MongoClient>;
 
 // Ensure typescript knows about _mongoClientPromise on globalThis
 declare global {
-  // eslint-disable-next-line no-var
   var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 

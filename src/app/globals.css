@@ -1,17 +1,34 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;850&display=swap");
 @import "tailwindcss";
 
+/*
+  Fonts are loaded through next/font in app/layout.tsx and exposed as
+  --font-inter / --font-outfit. The previous @import from fonts.googleapis.com
+  was a render-blocking cross-origin request on every page load.
+
+  Token NAMES below are unchanged from the original theme on purpose: all 42
+  tool pages reference them (bg-accent, text-secondary-text, shadow-card, …),
+  so the whole site restyles by editing values here rather than 42 files.
+*/
+
 :root {
+  /* Neutral scale — the interface is white, black and gray by default. */
   --background: #ffffff;
-  --foreground: #111827;
+  --foreground: #0a0a0a;
   --secondary: #6b7280;
   --card: #ffffff;
   --hover: #f5f5f5;
-  --accent: #2563eb;
-  --accent-light: #60a5fa;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --border: #e5e7eb;
+  --border: #e7e7e9;
+
+  /* Primary action colour. Near-black rather than blue: colour is reserved
+     for meaning (success, danger, warning, info), not decoration. */
+  --accent: #111113;
+  --accent-light: #37373d;
+
+  /* Semantic colours — used only to convey state. */
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #b91c1c;
+  --info: #1d4ed8;
 }
 
 @theme inline {
@@ -26,52 +43,200 @@
   --color-accent-light: var(--accent-light);
   --color-success: var(--success);
   --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --color-info: var(--info);
   --color-border-color: var(--border);
 
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-heading: "Outfit", "Segoe UI", system-ui, sans-serif;
+  --font-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  --font-heading: var(--font-outfit), var(--font-inter), system-ui, sans-serif;
 
-  --shadow-premium: 0 4px 30px rgba(0, 0, 0, 0.03);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-card-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+  --shadow-premium: 0 1px 2px rgba(9, 9, 11, 0.04), 0 8px 32px rgba(9, 9, 11, 0.04);
+  --shadow-card: 0 1px 2px rgba(9, 9, 11, 0.04);
+  --shadow-card-hover: 0 2px 4px rgba(9, 9, 11, 0.04), 0 12px 28px rgba(9, 9, 11, 0.07);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.021em;
 }
 
-/* Custom CSS utilities */
-.glassmorphism {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(229, 231, 235, 0.5);
+h1 {
+  letter-spacing: -0.033em;
 }
 
-/* Global scrollbar rules */
+/* ───────────────────────────── Accessibility ───────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Pointer users don't need the ring; keyboard users do. */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ────────────────────────────── Motion ────────────────────────────────── */
+
+/*
+  CSS keyframes rather than framer-motion for anything in the shared chrome.
+  Framer-motion is ~34 kB gzipped and was previously pulled into every route
+  by the header; these cover the same entrance effects at zero JS cost.
+*/
+
+@keyframes tn-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes tn-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes tn-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translate3d(0, -4px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes tn-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-fade-up {
+  animation: tn-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-fade-in {
+  animation: tn-fade-in 0.4s ease-out both;
+}
+
+.animate-scale-in {
+  animation: tn-scale-in 0.16s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Stagger helpers for grids — avoids inline style attributes per card. */
+.stagger > * {
+  animation: tn-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.stagger > *:nth-child(2) { animation-delay: 0.04s; }
+.stagger > *:nth-child(3) { animation-delay: 0.06s; }
+.stagger > *:nth-child(4) { animation-delay: 0.08s; }
+.stagger > *:nth-child(5) { animation-delay: 0.10s; }
+.stagger > *:nth-child(6) { animation-delay: 0.12s; }
+.stagger > *:nth-child(7) { animation-delay: 0.14s; }
+.stagger > *:nth-child(8) { animation-delay: 0.16s; }
+
+/* ───────────────────────────── Skeletons ──────────────────────────────── */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: #f1f1f3;
+  border-radius: 0.5rem;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: tn-shimmer 1.4s infinite;
+}
+
+/*
+  Respect the OS "reduce motion" setting. Entrance animations resolve to their
+  final state instantly instead of being skipped, so nothing stays invisible.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton::after {
+    animation: none;
+  }
+}
+
+/* ──────────────────────────── Scrollbars ──────────────────────────────── */
+
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 10px;
+  height: 10px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(29, 78, 216, 0.65);
-  border-radius: 10px;
+  background: #d4d4d8;
+  border: 3px solid var(--background);
+  border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(29, 78, 216, 1);
+  background: #a1a1aa;
 }
 
-/* Custom text selection */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  border-width: 1px;
+}
+
 ::selection {
-  background-color: rgba(37, 99, 235, 0.12);
-  color: #1d4ed8;
+  background-color: rgba(17, 17, 19, 0.1);
+  color: var(--foreground);
+}
+
+/* Legacy utility retained — a few tool pages still reference it. */
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(231, 231, 233, 0.6);
 }

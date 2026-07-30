@@ -1,8 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { ChevronRight, ArrowLeft } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Check, ChevronRight, Plus, ShieldCheck, Zap } from "lucide-react";
+
+import { getCategory } from "@/lib/categories";
+import { getToolByPath, relatedTools as siblingTools } from "@/lib/tools";
+import {
+  breadcrumbNode,
+  faqNode,
+  howToNode,
+  jsonLdGraph,
+  softwareApplicationNode,
+} from "@/lib/seo";
 
 interface FAQItem {
   question: string;
@@ -18,160 +28,235 @@ interface RelatedToolItem {
 interface ToolLayoutProps {
   title: string;
   description: string;
-  category: string;
-  categoryUrl: string;
+  /** Accepted for backward compatibility; the catalogue is authoritative. */
+  category?: string;
+  categoryUrl?: string;
   howToUse: string[];
   benefits: string[];
   faqs: FAQItem[];
-  relatedTools: RelatedToolItem[];
+  /** Accepted for backward compatibility; siblings are derived by category. */
+  relatedTools?: RelatedToolItem[];
   children: React.ReactNode;
 }
 
+/**
+ * Shared shell for every tool page.
+ *
+ * Two things changed from the original beyond styling:
+ *
+ * 1. Category, breadcrumbs and related tools are now derived from
+ *    `src/lib/tools.ts` rather than hand-passed per page, so a tool can never
+ *    disagree with the catalogue about which category it belongs to.
+ * 2. It emits JSON-LD. These pages are statically prerendered, so the markup
+ *    lands in the HTML crawlers receive even though this is a client component.
+ *
+ * framer-motion was removed here: it was ~34 kB gzipped on every tool page for
+ * three entrance transitions that CSS keyframes handle just as well.
+ */
 export default function ToolLayout({
   title,
   description,
-  category,
-  categoryUrl,
+  category: categoryProp,
   howToUse,
   benefits,
   faqs,
-  relatedTools,
   children,
 }: ToolLayoutProps) {
+  const pathname = usePathname();
+  const tool = getToolByPath(pathname);
+  const category = tool ? getCategory(tool.category) : undefined;
+
+  const categoryLabel = category?.label ?? categoryProp ?? "Tools";
+  const categoryHref = category ? `/tools/${category.slug}` : "/all-tools";
+
+  const related = tool
+    ? siblingTools(tool.slug, 3).map((t) => ({
+        name: t.name,
+        url: `/${t.slug}`,
+        description: t.tagline,
+      }))
+    : [];
+
+  // Structured data. Nodes that don't apply return null and are filtered out.
+  const jsonLd =
+    tool && category
+      ? jsonLdGraph(
+          [
+            softwareApplicationNode(tool, category),
+            breadcrumbNode([
+              { name: "Home", path: "/" },
+              { name: category.label, path: `/tools/${category.slug}` },
+              { name: tool.name, path: `/${tool.slug}` },
+            ]),
+            faqNode(faqs),
+            howToNode(tool, howToUse),
+          ].filter((node): node is Record<string, unknown> => node !== null),
+        )
+      : null;
+
   return (
-    <div className="min-h-screen py-8 md:py-12 bg-background">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        
-        {/* Navigation Breadcrumbs */}
-        <nav className="mb-6 flex items-center gap-2 text-xs md:text-sm text-secondary-text font-medium">
-          <Link href="/" className="hover:text-accent transition-colors">
-            Home
-          </Link>
-          <ChevronRight className="h-3.5 w-3.5" />
-          <Link href="/all-tools" className="hover:text-accent transition-colors">
-            All Tools
-          </Link>
-          <ChevronRight className="h-3.5 w-3.5" />
-          <span className="text-primary-text font-semibold">{title}</span>
+    <div className="bg-background">
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          // Content is built from our own catalogue, not user input.
+          dangerouslySetInnerHTML={{ __html: jsonLd }}
+        />
+      )}
+
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
+        {/* Breadcrumbs */}
+        <nav aria-label="Breadcrumb" className="mb-6">
+          <ol className="flex flex-wrap items-center gap-1.5 text-[12px] text-secondary-text">
+            <li>
+              <Link href="/" className="hover:text-primary-text">
+                Home
+              </Link>
+            </li>
+            <ChevronRight aria-hidden className="h-3 w-3 shrink-0" />
+            <li>
+              <Link href={categoryHref} className="hover:text-primary-text">
+                {categoryLabel}
+              </Link>
+            </li>
+            <ChevronRight aria-hidden className="h-3 w-3 shrink-0" />
+            <li aria-current="page" className="font-medium text-primary-text">
+              {tool?.name ?? title}
+            </li>
+          </ol>
         </nav>
 
-        {/* SECTION 1: Tool Hero */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-center md:text-left mb-8 md:mb-12 space-y-3"
-        >
-          <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-accent ring-1 ring-inset ring-accent/20">
-            {category}
-          </span>
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-heading font-extrabold tracking-tight text-primary-text">
+        {/* Hero */}
+        <header className="animate-fade-up mb-8 md:mb-10">
+          <Link
+            href={categoryHref}
+            className="inline-flex items-center rounded-full border border-border-color bg-secondary-bg px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary-text transition-colors hover:text-primary-text"
+          >
+            {categoryLabel}
+          </Link>
+          <h1 className="mt-3 font-heading text-3xl font-extrabold tracking-tight text-primary-text md:text-[2.5rem] md:leading-[1.1]">
             {title}
           </h1>
-          <p className="max-w-2xl text-base md:text-lg text-secondary-text leading-relaxed">
+          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-secondary-text md:text-base">
             {description}
           </p>
-        </motion.div>
 
-        {/* SECTION 2: Tool Interface */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-12 md:mb-16 rounded-2xl border border-border-color bg-card-bg shadow-card p-6 md:p-8"
+          <ul className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-secondary-text">
+            <li className="inline-flex items-center gap-1.5">
+              <ShieldCheck aria-hidden className="h-3.5 w-3.5 text-success" />
+              Runs in your browser
+            </li>
+            <li className="inline-flex items-center gap-1.5">
+              <Zap aria-hidden className="h-3.5 w-3.5 text-success" />
+              No signup or limits
+            </li>
+            <li className="inline-flex items-center gap-1.5">
+              <Check aria-hidden className="h-3.5 w-3.5 text-success" />
+              Free forever
+            </li>
+          </ul>
+        </header>
+
+        {/* The tool itself */}
+        <section
+          aria-label={`${tool?.name ?? title} tool`}
+          className="animate-fade-up mb-14 rounded-2xl border border-border-color bg-card-bg p-5 shadow-card md:p-8"
         >
           {children}
-        </motion.div>
+        </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 mb-12 md:mb-16">
-          {/* SECTION 3: How To Use */}
-          <div className="md:col-span-2 space-y-6">
-            <h2 className="text-2xl font-heading font-bold text-primary-text">
-              How to Use {title}
+        {/* How to use + benefits */}
+        <div className="mb-14 grid grid-cols-1 gap-10 md:grid-cols-5 md:gap-12">
+          <section className="md:col-span-3">
+            <h2 className="font-heading text-xl font-bold text-primary-text md:text-2xl">
+              How to use {tool?.name ?? title}
             </h2>
-            <ol className="relative border-l border-border-color pl-6 space-y-6">
-              {howToUse.map((step, idx) => (
-                <li key={idx} className="relative">
-                  <span className="absolute left-[-37px] top-0 flex h-6 w-6 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white">
-                    {idx + 1}
+            <ol className="mt-5 space-y-4">
+              {howToUse.map((step, i) => (
+                <li key={i} className="flex gap-3.5">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border-color bg-secondary-bg text-[11px] font-bold text-primary-text">
+                    {i + 1}
                   </span>
-                  <p className="text-sm md:text-base text-primary-text font-medium leading-tight">
-                    {step}
-                  </p>
+                  <p className="pt-0.5 text-[14px] leading-relaxed text-secondary-text">{step}</p>
                 </li>
               ))}
             </ol>
-          </div>
+          </section>
 
-          {/* SECTION 4: Benefits */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-heading font-bold text-primary-text">
-              Benefits & Features
+          <section className="md:col-span-2">
+            <h2 className="font-heading text-xl font-bold text-primary-text md:text-2xl">
+              What you get
             </h2>
-            <ul className="space-y-3">
-              {benefits.map((benefit, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-sm text-secondary-text leading-relaxed">
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/15 text-success text-xs font-bold mt-0.5">
-                    ✓
-                  </span>
-                  <span>{benefit}</span>
+            <ul className="mt-5 space-y-3">
+              {benefits.map((benefit, i) => (
+                <li key={i} className="flex gap-2.5">
+                  <Check aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                  <span className="text-[14px] leading-relaxed text-secondary-text">{benefit}</span>
                 </li>
               ))}
             </ul>
-          </div>
+          </section>
         </div>
 
-        {/* SECTION 5: Frequently Asked Questions */}
+        {/* FAQs — native <details>, so the answers are in the HTML with no JS. */}
         {faqs.length > 0 && (
-          <div className="border-t border-border-color pt-12 mb-12 md:mb-16 space-y-8">
-            <div className="text-center md:text-left">
-              <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary-text">
-                Frequently Asked Questions
-              </h2>
-              <p className="text-sm text-secondary-text mt-1.5">
-                Common questions about our {title} tool.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {faqs.map((faq, idx) => (
-                <div key={idx} className="rounded-xl border border-border-color p-5 bg-card-bg hover:shadow-premium transition-shadow duration-200">
-                  <h3 className="font-heading font-semibold text-base text-primary-text mb-2">
-                    {faq.question}
-                  </h3>
-                  <p className="text-sm text-secondary-text leading-relaxed">
+          <section className="mb-14 border-t border-border-color pt-12">
+            <h2 className="font-heading text-xl font-bold text-primary-text md:text-2xl">
+              Frequently asked questions
+            </h2>
+            <div className="mt-6 divide-y divide-border-color border-y border-border-color">
+              {faqs.map((faq, i) => (
+                <details key={i} className="group">
+                  <summary className="flex cursor-pointer list-none items-start justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
+                    <h3 className="font-heading text-[15px] font-semibold text-primary-text">
+                      {faq.question}
+                    </h3>
+                    <Plus
+                      aria-hidden
+                      className="mt-0.5 h-4 w-4 shrink-0 text-secondary-text transition-transform duration-200 group-open:rotate-45"
+                    />
+                  </summary>
+                  <p className="pb-4 pr-8 text-[14px] leading-relaxed text-secondary-text">
                     {faq.answer}
                   </p>
-                </div>
+                </details>
               ))}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* SECTION 6: Related Tools */}
-        {relatedTools.length > 0 && (
-          <div className="border-t border-border-color pt-12">
-            <h2 className="text-2xl font-heading font-bold text-primary-text mb-6">
-              Related Tools
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {relatedTools.map((tool, idx) => (
+        {/* Related tools */}
+        {related.length > 0 && (
+          <section className="border-t border-border-color pt-12">
+            <div className="flex items-baseline justify-between gap-4">
+              <h2 className="font-heading text-xl font-bold text-primary-text md:text-2xl">
+                Related tools
+              </h2>
+              <Link
+                href={categoryHref}
+                className="text-[13px] font-semibold text-secondary-text underline-offset-4 hover:text-primary-text hover:underline"
+              >
+                All {categoryLabel} →
+              </Link>
+            </div>
+            <div className="stagger mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              {related.map((item) => (
                 <Link
-                  key={idx}
-                  href={tool.url}
-                  className="block p-5 rounded-xl border border-border-color bg-card-bg hover:bg-hover-bg hover:border-accent hover:-translate-y-0.5 transition-all duration-200"
+                  key={item.url}
+                  href={item.url}
+                  className="group rounded-xl border border-border-color bg-card-bg p-4 transition-all duration-200 hover:border-secondary-text/30 hover:shadow-card-hover"
                 >
-                  <h3 className="font-heading font-semibold text-primary-text hover:text-accent transition-colors">
-                    {tool.name}
+                  <h3 className="font-heading text-[14px] font-bold text-primary-text">
+                    {item.name}
                   </h3>
-                  <p className="text-xs text-secondary-text mt-1.5 line-clamp-2">
-                    {tool.description}
+                  <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed text-secondary-text">
+                    {item.description}
                   </p>
                 </Link>
               ))}
             </div>
-          </div>
+          </section>
         )}
-
       </div>
     </div>
   );
