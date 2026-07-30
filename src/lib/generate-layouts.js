@@ -33,12 +33,13 @@ function readToolSlugs() {
 }
 
 /** Static pages that aren't tools. Copy lives here because it lives nowhere else. */
-const STATIC_PAGES = [
+const staticPages = (TOOL_COUNT) => [
   {
     folder: "all-tools",
     title: "All Free Online Tools - Complete Directory | ToolNagri",
     description:
-      "Browse all 42 free online tools: PDF, image, text, developer, calculator, SEO and network utilities. Everything runs in your browser with no signup.",
+      `Browse all ${TOOL_COUNT} free online tools: PDF, image, text, developer, calculator, ` +
+      "SEO, social download and network utilities. Free with no signup.",
     path: "/all-tools",
   },
   {
@@ -121,13 +122,13 @@ function main() {
     if (writeFileIfChanged(path.join(folder, "layout.tsx"), toolLayout(slug))) written++;
   }
 
-  for (const page of STATIC_PAGES) {
+  for (const page of staticPages(slugs.length)) {
     const target = path.join(appDir, page.folder, "layout.tsx");
     if (writeFileIfChanged(target, staticLayout(page))) written++;
   }
 
   console.log(
-    `Generated layouts for ${slugs.length} tools + ${STATIC_PAGES.length} static pages ` +
+    `Generated layouts for ${slugs.length} tools + ${staticPages(slugs.length).length} static pages ` +
       `(${written} file${written === 1 ? "" : "s"} changed).`,
   );
 

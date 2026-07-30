@@ -3,6 +3,7 @@ import {
   ArrowRight,
   Calculator,
   Code2,
+  Download,
   FileText,
   Image as ImageIcon,
   Shield,
@@ -42,6 +43,7 @@ const CATEGORY_ICONS: Record<CategorySlug, typeof FileText> = {
   developer: Code2,
   calculators: Calculator,
   seo: TrendingUp,
+  social: Download,
   network: Shield,
 };
 

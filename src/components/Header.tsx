@@ -7,6 +7,7 @@ import {
   Calculator,
   ChevronDown,
   Code2,
+  Download,
   FileText,
   Image as ImageIcon,
   Menu,
@@ -33,6 +34,7 @@ const CATEGORY_ICONS: Record<CategorySlug, typeof FileText> = {
   developer: Code2,
   calculators: Calculator,
   seo: TrendingUp,
+  social: Download,
   network: Shield,
 };
 
@@ -193,8 +195,11 @@ export default function Header() {
               className="hidden sm:flex items-center gap-2 rounded-lg border border-border-color bg-secondary-bg px-3 py-1.5 text-[13px] text-secondary-text transition-colors hover:border-secondary-text/40 hover:text-primary-text"
             >
               <Search aria-hidden className="h-3.5 w-3.5" />
-              <span>Search tools</span>
-              <kbd className="ml-1 hidden rounded border border-border-color bg-background px-1.5 py-0.5 font-sans text-[10px] font-medium text-secondary-text lg:inline">
+              {/* Label and shortcut hint are dropped between lg and xl, where
+                  eight category triggers already fill the row. */}
+              <span className="hidden xl:inline">Search tools</span>
+              <span className="lg:hidden xl:hidden">Search tools</span>
+              <kbd className="ml-1 hidden rounded border border-border-color bg-background px-1.5 py-0.5 font-sans text-[10px] font-medium text-secondary-text xl:inline">
                 Ctrl K
               </kbd>
             </button>
@@ -472,7 +477,7 @@ function SearchDialog({ onClose }: { onClose: () => void }) {
                   onClose();
                 }
               }}
-              placeholder="Search 42 tools…"
+              placeholder={`Search ${TOOLS.length} tools…`}
               className="w-full bg-transparent text-[15px] text-primary-text placeholder-secondary-text outline-none"
             />
             <button

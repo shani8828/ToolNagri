@@ -69,6 +69,9 @@ export default function ToolLayout({
   const categoryLabel = category?.label ?? categoryProp ?? "Tools";
   const categoryHref = category ? `/tools/${category.slug}` : "/all-tools";
 
+  // Unknown tools fall back to the cautious claim rather than the reassuring one.
+  const isLocal = tool ? (tool.processing ?? "local") === "local" : false;
+
   const related = tool
     ? siblingTools(tool.slug, 3).map((t) => ({
         name: t.name,
@@ -141,18 +144,39 @@ export default function ToolLayout({
             {description}
           </p>
 
+          {/*
+            Badges reflect what the tool actually does. Most tools run entirely
+            in the browser and can say so; the handful that send input to a
+            server must not inherit that claim, or the promise means nothing
+            anywhere on the site.
+          */}
           <ul className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[12px] text-secondary-text">
-            <li className="inline-flex items-center gap-1.5">
-              <ShieldCheck aria-hidden className="h-3.5 w-3.5 text-success" />
-              Runs in your browser
-            </li>
-            <li className="inline-flex items-center gap-1.5">
-              <Zap aria-hidden className="h-3.5 w-3.5 text-success" />
-              No signup or limits
-            </li>
+            {isLocal ? (
+              <>
+                <li className="inline-flex items-center gap-1.5">
+                  <ShieldCheck aria-hidden className="h-3.5 w-3.5 text-success" />
+                  Runs in your browser
+                </li>
+                <li className="inline-flex items-center gap-1.5">
+                  <Zap aria-hidden className="h-3.5 w-3.5 text-success" />
+                  Files never uploaded
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="inline-flex items-center gap-1.5">
+                  <ShieldCheck aria-hidden className="h-3.5 w-3.5 text-success" />
+                  Nothing stored
+                </li>
+                <li className="inline-flex items-center gap-1.5">
+                  <Zap aria-hidden className="h-3.5 w-3.5 text-success" />
+                  No signup
+                </li>
+              </>
+            )}
             <li className="inline-flex items-center gap-1.5">
               <Check aria-hidden className="h-3.5 w-3.5 text-success" />
-              Free forever
+              Free to use
             </li>
           </ul>
         </header>

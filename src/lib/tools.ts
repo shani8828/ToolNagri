@@ -26,6 +26,18 @@ export interface Tool {
   keywords: string[];
   category: CategorySlug;
   icon: IconName;
+  /**
+   * Where the work happens.
+   *
+   * "local"   — everything runs in the browser; the input never leaves the device.
+   * "network" — the input is sent to a server (ours or a third party's).
+   *
+   * This drives the trust badges on the tool page. Most of the site is local,
+   * and that claim is a big part of why people use it — so a tool that does
+   * make a network call must say so rather than inherit the reassurance.
+   * Defaults to "local" when omitted.
+   */
+  processing?: "local" | "network";
   /** ISO date of the last meaningful content change. */
   updated: string;
   popular?: boolean;
@@ -480,6 +492,8 @@ export const TOOLS: Tool[] = [
     keywords: ["url shortener", "short link generator", "link shortener free", "custom short url"],
     category: "seo",
     icon: "link",
+    // Stores the destination URL in our database.
+    processing: "network",
     updated: REVISED,
     popular: true,
     trending: true,
@@ -522,6 +536,7 @@ export const TOOLS: Tool[] = [
     icon: "link",
     updated: REVISED,
   },
+  // ────────────────────── Social & Downloads ───────────────────────
   {
     slug: "youtube-thumbnail",
     name: "YouTube Thumbnail",
@@ -534,10 +549,60 @@ export const TOOLS: Tool[] = [
       "download youtube thumbnail",
       "yt thumbnail grabber",
     ],
-    category: "seo",
+    // Moved out of SEO & Marketing: it's a media downloader, which is what
+    // people searching for it expect it to sit beside.
+    category: "social",
     icon: "youtube",
+    // Loads thumbnail images from YouTube's servers.
+    processing: "network",
     updated: REVISED,
     trending: true,
+  },
+  {
+    slug: "instagram-reel-downloader",
+    name: "Instagram Reel Downloader",
+    tagline: "Save public Instagram reels and videos in HD.",
+    seoTitle: "Instagram Reel Downloader — Save Reels in HD, Free",
+    seoDescription:
+      "Paste a public Instagram reel link to download the video in HD, with no watermark and no signup. Works for reels, video posts and IGTV.",
+    keywords: [
+      "instagram reel downloader",
+      "download instagram reels",
+      "instagram video downloader",
+      "save instagram reel",
+      "insta reel download",
+    ],
+    category: "social",
+    icon: "instagram",
+    // Sends the link to our downloader service.
+    processing: "network",
+    updated: REVISED,
+    popular: true,
+    trending: true,
+    isNew: true,
+  },
+  {
+    slug: "facebook-reel-downloader",
+    name: "Facebook Reel Downloader",
+    tagline: "Save public Facebook reels and videos in HD.",
+    seoTitle: "Facebook Reel Downloader — Save FB Reels & Videos Free",
+    seoDescription:
+      "Paste a public Facebook reel or video link to download it in HD. Free, no watermark and no signup. Supports facebook.com and fb.watch links.",
+    keywords: [
+      "facebook reel downloader",
+      "download facebook reels",
+      "fb video downloader",
+      "facebook video download",
+      "fb watch downloader",
+    ],
+    category: "social",
+    icon: "facebook",
+    // Sends the link to our downloader service.
+    processing: "network",
+    updated: REVISED,
+    popular: true,
+    trending: true,
+    isNew: true,
   },
 
   // ───────────────────── Network & Security Tools ───────────────────
@@ -551,6 +616,8 @@ export const TOOLS: Tool[] = [
     keywords: ["dns lookup", "check dns records", "mx record lookup", "dns checker"],
     category: "network",
     icon: "globe",
+    // Queries Cloudflare DNS over HTTPS from your browser.
+    processing: "network",
     updated: REVISED,
   },
   {
@@ -563,6 +630,8 @@ export const TOOLS: Tool[] = [
     keywords: ["what is my ip", "my ip address", "check ip", "public ip lookup"],
     category: "network",
     icon: "eye",
+    // Queries a public IP lookup service from your browser.
+    processing: "network",
     updated: REVISED,
     popular: true,
   },

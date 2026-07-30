@@ -17,6 +17,7 @@ export const CATEGORY_SLUGS = [
   "developer",
   "calculators",
   "seo",
+  "social",
   "network",
 ] as const;
 
@@ -102,7 +103,7 @@ export const CATEGORIES: Category[] = [
   },
   {
     slug: "seo",
-    name: "SEO & Marketing",
+    name: "SEO",
     label: "SEO & Marketing Tools",
     tagline: "Short links, QR codes, UTM tags and slugs.",
     seoTitle: "Free SEO & Marketing Tools - URL Shortener, QR Codes, UTM Builder",
@@ -113,8 +114,25 @@ export const CATEGORIES: Category[] = [
     icon: "trending-up",
   },
   {
+    slug: "social",
+    name: "Social",
+    label: "Social & Downloads",
+    tagline: "Save reels, videos and thumbnails.",
+    seoTitle: "Social Media Downloaders — Instagram & Facebook Reels, Free",
+    seoDescription:
+      "Download Instagram reels, Facebook reels and YouTube thumbnails in HD. Paste a public link and save the video — free, no signup and no watermark.",
+    /*
+      Note the deliberately different framing from every other category: these
+      tools cannot run in the browser, because the platforms block cross-origin
+      reads. Claiming "nothing leaves your device" here would be false.
+    */
+    intro:
+      "Paste a public post link and save the video or image behind it. Unlike the rest of the site, these tools need a server step — the platforms block browsers from reading their media directly — so the link you paste is sent to our downloader service. Only public posts work, and nothing you download is stored. Please save only content you own or have permission to use.",
+    icon: "download",
+  },
+  {
     slug: "network",
-    name: "Network & Security",
+    name: "Network",
     label: "Network & Security Tools",
     tagline: "DNS records, IP lookup and strong passwords.",
     seoTitle: "Free Network & Security Tools - DNS Lookup, IP Address, Passwords",
