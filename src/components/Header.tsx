@@ -16,6 +16,7 @@ import {
   TrendingUp,
   Type,
   X,
+  Palette,
 } from "lucide-react";
 
 import { CATEGORIES, type CategorySlug } from "@/lib/categories";
@@ -36,6 +37,7 @@ const CATEGORY_ICONS: Record<CategorySlug, typeof FileText> = {
   seo: TrendingUp,
   social: Download,
   network: Shield,
+  design: Palette,
 };
 
 /** Delay before a hovered category opens, so cursor fly-through doesn't flicker. */
@@ -126,7 +128,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full border-b border-border-color bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
+      <header className="sticky top-0 z-40 w-full border-b border-border-color bg-background/90 backdrop-blur-md supports-backdrop-filter:bg-background/75">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center gap-4">
             {/* Wordmark */}
@@ -368,7 +370,7 @@ function MobileMenu({ pathname, onClose }: { pathname: string; onClose: () => vo
                 </button>
 
                 {isExpanded && (
-                  <ul id={panelId} className="animate-fade-in space-y-0.5 pb-3 pl-[3.25rem] pr-3">
+                  <ul id={panelId} className="animate-fade-in space-y-0.5 pb-3 pl-13 pr-3">
                     {tools.map((tool) => (
                       <li key={tool.slug}>
                         <Link

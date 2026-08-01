@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata = pageMetadata({
   title: "All Free Online Tools - Complete Directory | ToolNagri",
-  description: "Browse all 44 free online tools: PDF, image, text, developer, calculator, SEO, social download and network utilities. Free with no signup.",
+  description: "Browse all 92 free online tools: PDF, image, text, developer, calculator, SEO, social download and network utilities. Free with no signup.",
   path: "/all-tools",
 });
 

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import ToolLayout from "@/components/ToolLayout";
 import { FileText, Copy, Check, Eye } from "lucide-react";
+import confetti from "canvas-confetti";
 
 export default function MarkdownToHtml() {
   const [inputText, setInputText] = useState("");
@@ -14,20 +15,48 @@ export default function MarkdownToHtml() {
       navigator.clipboard.writeText(outputText);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+
+      confetti({
+        particleCount: 15,
+        spread: 20,
+        origin: { y: 0.8 },
+        colors: ["#2563eb", "#3b82f6"],
+      });
     }
   };
 
-  // Basic regex markdown parser
+  const renderTableHtml = (rows: string[][]): string => {
+    if (rows.length === 0) return "";
+    
+    const headers = rows[0];
+    const dataRows = rows.slice(1);
+    
+    const headerHtml = `<thead><tr class="bg-secondary-bg/25 border-b border-border-color">${headers
+      .map((h) => `<th class="py-2 px-3 text-left font-bold border border-border-color">${h}</th>`)
+      .join("")}</tr></thead>`;
+    
+    const bodyHtml = `<tbody>${dataRows
+      .map(
+        (row) =>
+          `<tr class="border-b border-border-color/65 hover:bg-hover-bg/30">${row
+            .map((cell) => `<td class="py-2 px-3 border border-border-color">${cell}</td>`)
+            .join("")}</tr>`
+      )
+      .join("")}</tbody>`;
+    
+    return `\n<table class="w-full text-xs text-left border-collapse border border-border-color my-4 shadow-xs">\n${headerHtml}\n${bodyHtml}\n</table>\n`;
+  };
+
+  // Regex-based Markdown compiler supporting tables
   const parseMarkdown = (md: string) => {
     let html = md.trim();
 
-    // Escape basic HTML entities to prevent scripts injection
+    // Escape basic HTML entities to prevent script injection
     html = html
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
 
-    // Block elements:
     // 1. Code blocks
     html = html.replace(/\r?\n```([\s\S]*?)```/g, (_, code) => {
       return `\n<pre><code>${code.trim()}</code></pre>\n`;
@@ -39,11 +68,44 @@ export default function MarkdownToHtml() {
     html = html.replace(/^(?:###\s)(.*?)$/gm, "<h3>$1</h3>");
     html = html.replace(/^(?:####\s)(.*?)$/gm, "<h4>$1</h4>");
 
-    // 3. Lists (un-ordered lists)
-    // Gather consecutive bullet lines
-    html = html.replace(/^(?:\*\s|-\s)(.*?)$/gm, "<li>$1</li>");
-    // Wrap adjacent list items in <ul>
-    html = html.replace(/((?:<li>.*?<\/li>\s*)+)/g, "\n<ul>\n$1</ul>\n");
+    // 3. Markdown Table Parsing State Machine
+    const lines = html.split(/\r?\n/);
+    let inTable = false;
+    let tableRows: string[][] = [];
+    const parsedLines: string[] = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith("|") && line.endsWith("|")) {
+        const cells = line
+          .split("|")
+          .slice(1, -1)
+          .map((c) => c.trim());
+        
+        // Match separators: e.g. |---|---|
+        const isSeparator = cells.every((c) => c.match(/^:?-+:?$/));
+        
+        if (isSeparator) {
+          inTable = true;
+        } else {
+          tableRows.push(cells);
+          inTable = true;
+        }
+      } else {
+        if (inTable && tableRows.length > 0) {
+          parsedLines.push(renderTableHtml(tableRows));
+          tableRows = [];
+          inTable = false;
+        }
+        parsedLines.push(lines[i]);
+      }
+    }
+    
+    if (inTable && tableRows.length > 0) {
+      parsedLines.push(renderTableHtml(tableRows));
+    }
+
+    html = parsedLines.join("\n");
 
     // Inline elements:
     // 4. Bold
@@ -58,18 +120,25 @@ export default function MarkdownToHtml() {
     // 7. Links
     html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline font-semibold">$1</a>');
 
-    // 8. Paragraph blocks (splitting by empty line coordinates)
+    // 8. Paragraph blocks
     const blocks = html.split(/\n\s*\n/);
-    const parsedBlocks = blocks.map(block => {
+    const parsedBlocks = blocks.map((block) => {
       const trimmed = block.trim();
       if (!trimmed) return "";
-      // Skip wrapping if it is already a block element
-      const isBlock = trimmed.startsWith("<h") || trimmed.startsWith("<pre") || trimmed.startsWith("<ul") || trimmed.startsWith("<li");
+      const isBlock =
+        trimmed.startsWith("<h") ||
+        trimmed.startsWith("<pre") ||
+        trimmed.startsWith("<ul") ||
+        trimmed.startsWith("<li") ||
+        trimmed.startsWith("<table") ||
+        trimmed.startsWith("<thead") ||
+        trimmed.startsWith("<tbody") ||
+        trimmed.startsWith("<tr");
       if (isBlock) return trimmed;
       return `<p class="leading-relaxed mb-4">${trimmed.replace(/\n/g, "<br />")}</p>`;
     });
 
-    return parsedBlocks.filter(b => b !== "").join("\n");
+    return parsedBlocks.filter((b) => b !== "").join("\n");
   };
 
   useEffect(() => {
@@ -81,39 +150,40 @@ export default function MarkdownToHtml() {
   }, [inputText]);
 
   const howToUse = [
-    "Type or paste your Markdown content into the input editor pane on the left.",
-    "Observe real-time compilation converting Markdown tokens to structured HTML tags on the right.",
-    "Inspect the HTML markup code, or view the live compiled page representation below.",
-    "Click the copy button to capture the generated HTML code with one tap."
+    "Type or paste your Markdown code into the editor on the left.",
+    "Observe real-time compiling converting Markdown cells and tokens to HTML code.",
+    "Paste tabular layouts separated by pipes | to view parsed standard table grids.",
+    "Review the rendered page visual markup inside the Live Preview container.",
+    "Click the Copy HTML button to save compiled markup to your clipboard."
   ];
 
   const benefits = [
-    "Converts core Markdown elements (headings, links, lists, code, bold/italic) instantly.",
-    "Provides both raw HTML code output and formatted rich text live previews.",
-    "Completely client-side conversion ensures input content is not logged anywhere.",
-    "Produces clean, minimal, and standard-compliant HTML outputs."
+    "Compiles table headers, rows, alignments, and spacing parameters cleanly.",
+    "Translates bold, italic, links, lists, and inline code blocks in real-time.",
+    "100% Client-Side rendering keeps your documentation secure locally.",
+    "Produces clean, minimal, W3C standard-compliant HTML code."
   ];
 
   const faqs = [
     {
-      question: "Are tables or custom HTML blocks parsed?",
-      answer: "This is a lightweight regex-based parser. Custom layouts and HTML tag nesting are sanitized and returned as plain text to prevent script injection issues.",
+      question: "How do I build tables in Markdown?",
+      answer: "Tables are constructed by separating cells with pipe boundaries | and defining header rows. The second row must contain dashes (e.g. `|---|---|`) to separate columns."
     },
     {
-      question: "Does it support inline images?",
-      answer: "Yes, standard Markdown link mappings `[Link Text](URL)` are converted to standard `<a>` tags. Image tags are not directly parsed by default to prioritize clean text layout."
+      question: "Can I copy the raw HTML into my CMS?",
+      answer: "Yes. The output matches clean standard HTML tags and can be pasted directly into WordPress, Medium, or custom databases."
     }
   ];
 
   const relatedTools = [
-    { name: "Word Counter", url: "/word-counter", description: "Analyze characters, paragraphs, and reading times." },
-    { name: "JSON Formatter & Validator", url: "/json-formatter", description: "Beautify, parse, and validate JSON payloads." }
+    { name: "Word Counter", url: "/word-counter", description: "Count words and characters." },
+    { name: "String Randomizer", url: "/string-randomizer", description: "Generate bulk random keys." }
   ];
 
   return (
     <ToolLayout
       title="Markdown to HTML Converter"
-      description="Write or paste Markdown documentation and instantly translate it to standard HTML markup with live preview representation."
+      description="Write or paste Markdown documentation and instantly translate it to standard HTML markup. Supports code snippets, links, lists, and grid tables."
       category="Text Tools"
       categoryUrl="/#text"
       howToUse={howToUse}
@@ -133,7 +203,7 @@ export default function MarkdownToHtml() {
             <textarea
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="# Heading 1&#10;&#10;Type some **bold** or *italic* text here.&#10;&#10;- Bullet list item 1&#10;- Bullet list item 2&#10;&#10;Create a [link](https://toolnagri.vercel.app)."
+              placeholder="# Heading 1&#10;&#10;Type some **bold** or *italic* text here.&#10;&#10;| Product | Pricing |&#10;|---------|---------|&#10;| ToolNagri | Free |&#10;| premium | $0 |&#10;&#10;- Bullet list item 1&#10;- Bullet list item 2"
               rows={12}
               className="w-full rounded-lg border border-border-color bg-background px-4 py-3 text-sm text-primary-text font-mono focus:border-accent focus:outline-none"
             />
@@ -168,7 +238,7 @@ export default function MarkdownToHtml() {
         {outputText && (
           <div className="border border-border-color rounded-xl p-5 bg-card-bg shadow-xs space-y-4">
             <h3 className="text-sm font-semibold text-primary-text flex items-center gap-1.5 border-b border-border-color pb-2">
-              <Eye className="h-4.5 w-4.5 text-accent" /> Live Preview Rendering
+              <Eye className="h-4.5 w-4.5 text-accent animate-pulse" /> Live Preview Rendering
             </h3>
             
             {/* Rendered HTML */}

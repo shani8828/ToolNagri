@@ -10,6 +10,7 @@ import {
   TrendingUp,
   Type,
   Zap,
+  Palette,
 } from "lucide-react";
 
 import ToolCard from "@/components/ToolCard";
@@ -45,6 +46,7 @@ const CATEGORY_ICONS: Record<CategorySlug, typeof FileText> = {
   seo: TrendingUp,
   social: Download,
   network: Shield,
+  design: Palette,
 };
 
 export default function Home() {

@@ -19,6 +19,7 @@ export const CATEGORY_SLUGS = [
   "seo",
   "social",
   "network",
+  "design",
 ] as const;
 
 export type CategorySlug = (typeof CATEGORY_SLUGS)[number];
@@ -141,6 +142,18 @@ export const CATEGORIES: Category[] = [
     intro:
       "Diagnostics and hardening basics. Inspect how a domain resolves, see what the internet knows about your connection, and generate passwords using the browser's cryptographic random number generator.",
     icon: "shield",
+  },
+  {
+    slug: "design",
+    name: "Design",
+    label: "CSS & Design Utilities",
+    tagline: "Generate gradients, shadows, border shapes, and palettes.",
+    seoTitle: "Free CSS & Design Utilities Online - Gradients, Shadows & Palettes",
+    seoDescription:
+      "Free online design and CSS generators. Build custom gradients, box-shadow layer stacks, organic border-radius morphs, and extract image color palettes. 100% client-side.",
+    intro:
+      "A suite of visual utilities for web designers and front-end developers. Create layered box shadows, complex linear or radial gradients, organic morphing border-radius rules, and extract color palettes from custom images — all rendering instantly in your browser sandbox.",
+    icon: "palette",
   },
 ];
 
