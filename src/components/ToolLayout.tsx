@@ -131,12 +131,12 @@ export default function ToolLayout({
 
         {/* Hero */}
         <header className="animate-fade-up mb-8 md:mb-10">
-          <Link
+          {/* <Link
             href={categoryHref}
             className="inline-flex items-center rounded-full border border-border-color bg-secondary-bg px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary-text transition-colors hover:text-primary-text"
           >
             {categoryLabel}
-          </Link>
+          </Link> */}
           <h1 className="mt-3 font-heading text-3xl font-extrabold tracking-tight text-primary-text md:text-[2.5rem] md:leading-[1.1]">
             {title}
           </h1>

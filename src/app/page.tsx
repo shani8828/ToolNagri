@@ -61,9 +61,8 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Column: Title and Search/Links */}
             <div className="animate-fade-up lg:col-span-7">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-border-color bg-secondary-bg px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary-text">
-                <Zap aria-hidden className="h-3 w-3" />
-                {TOOLS.length} tools · no signup
+              <span className="inline-flex animate-pulse items-center gap-1.5 border-b border-border-color   bg-secondary-bg px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary-text">
+                <span className="text-gray-700 font-bold">{TOOLS.length}</span> tools · no signup
               </span>
 
               <h1 className="mt-5 font-heading text-4xl font-extrabold leading-[1.05] tracking-tight text-primary-text sm:text-5xl lg:text-6xl">
@@ -122,7 +121,7 @@ export default function Home() {
                 Browse by category
               </h2>
               <p className="mt-2 text-[14px] text-secondary-text">
-                Seven collections covering documents, media, code and everyday maths.
+                7 collections covering documents, media, code and everyday maths.
               </p>
             </div>
           </div>

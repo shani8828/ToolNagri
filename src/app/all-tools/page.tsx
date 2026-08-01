@@ -35,9 +35,9 @@ export default function AllToolsPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
 
       <header className="animate-fade-up max-w-2xl">
-        <span className="inline-flex items-center rounded-full border border-border-color bg-secondary-bg px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary-text">
+        {/* <span className="inline-flex items-center rounded-full border border-border-color bg-secondary-bg px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary-text">
           Directory
-        </span>
+        </span> */}
         <h1 className="mt-4 font-heading text-3xl font-extrabold tracking-tight text-primary-text md:text-[2.75rem] md:leading-[1.08]">
           All {TOOLS.length} free online tools
         </h1>

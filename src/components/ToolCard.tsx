@@ -55,7 +55,7 @@ export default function ToolCard({ tool, compact = false }: { tool: Tool; compac
     >
       <div className="mb-3.5 flex items-start justify-between">
         <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-border-color bg-secondary-bg text-primary-text transition-colors duration-200 group-hover:bg-primary-text group-hover:text-background">
-          <ToolGlyph name={tool.icon} className="h-[18px] w-[18px]" />
+          <ToolGlyph name={tool.icon} className="h-4.5 w-4.5" />
         </span>
         {tool.popular && (
           <span className="rounded-full border border-border-color px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-secondary-text">
