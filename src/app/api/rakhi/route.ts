@@ -132,6 +132,26 @@ export async function POST(request: NextRequest) {
 
     await collection.insertOne(newWish);
 
+    // Send Telegram Notification asynchronously (fire-and-forget)
+    const telegramToken = process.env.TELEGRAM_TOKEN;
+    const telegramChatId = process.env.TELEGRAM_CHAT_ID;
+    if (telegramToken && telegramChatId) {
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+      const message = `🎉 <b>New Rakhi Wishing Card Created!</b>\n\n👤 <b>Sender:</b> ${cleanSender}\n👥 <b>Receiver:</b> ${cleanReceiver}\n🌐 <b>Language:</b> ${cleanLang === "hi" ? "Hindi 🇮🇳" : "English 🇬🇧"}\n🔑 <b>Slug ID:</b> <code>${slug}</code>\n🔗 <b>Card URL:</b> ${siteUrl}/rakshabandhan-2026?id=${slug}`;
+
+      fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: telegramChatId,
+          text: message,
+          parse_mode: "HTML",
+        }),
+      }).catch((err) => {
+        console.error("Failed to send Telegram message:", err);
+      });
+    }
+
     // Ensure TTL index is set so old wishes cleanup after 60 days
     try {
       await collection.createIndex(
