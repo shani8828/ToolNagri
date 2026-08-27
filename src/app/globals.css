@@ -249,3 +249,38 @@ h1 {
   backdrop-filter: blur(12px);
   border: 1px solid rgba(225, 233, 241, 0.7);
 }
+
+/* ───────────────────────────── Festival Animations ───────────────────────────── */
+
+@keyframes festival-shimmer {
+  0% {
+    transform: translateX(-150%) rotate(25deg);
+  }
+  100% {
+    transform: translateX(250%) rotate(25deg);
+  }
+}
+
+.festival-shimmer-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.festival-shimmer-bg::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: -50%;
+  width: 40%;
+  height: 300%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(25deg);
+  animation: festival-shimmer 3.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
