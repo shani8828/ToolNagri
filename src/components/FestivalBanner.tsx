@@ -7,171 +7,140 @@ export default function FestivalBanner() {
   return (
     <div className="relative w-full">
       {/* Glow shadow behind the card */}
-      <div className="absolute inset-0 bg-linear-to-r from-orange-500 via-rose-500 to-amber-500 rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-500 -z-10" />
+      <div className="absolute inset-0 bg-linear-to-r from-indigo-500 via-blue-500 to-teal-500 rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-500 -z-10" />
 
-      <div className="festival-shimmer-bg group relative overflow-hidden rounded-3xl border border-rose-100 bg-linear-to-r from-[#fef2f2] via-[#fffbeb] to-[#fff7ed] p-6 sm:p-8 md:p-10 shadow-premium transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(244,63,94,0.12)]">
+      <div className="festival-shimmer-bg group relative overflow-hidden rounded-3xl border border-indigo-100 bg-linear-to-r from-[#eef2ff] via-[#ecfeff] to-[#eff6ff] p-6 sm:p-8 md:p-10 shadow-premium transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(79,70,229,0.12)]">
         {/* Decorative corner circles */}
-        <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-rose-200/30 blur-2xl pointer-events-none" />
-        <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-amber-200/30 blur-2xl pointer-events-none" />
+        <div className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-indigo-200/30 blur-2xl pointer-events-none" />
+        <div className="absolute -left-16 -bottom-16 h-48 w-48 rounded-full bg-teal-200/30 blur-2xl pointer-events-none" />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center relative z-10">
-          
+
           {/* Left / Top side: Copy and buttons */}
           <div className="md:col-span-7 flex flex-col items-start text-left">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-rose-100 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-rose-600 shadow-sm border border-rose-200/40">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-indigo-100 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-indigo-600 shadow-sm border border-indigo-200/40">
               <Sparkles className="h-3.5 w-3.5 animate-spin" style={{ animationDuration: '3s' }} />
               Festival Special
             </span>
 
             <h2 className="mt-4 font-heading text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
-              Raksha Bandhan <span className="bg-linear-to-r from-rose-600 to-orange-500 bg-clip-text text-transparent">2026</span>
+              Krishna Janmashtami <span className="bg-linear-to-r from-indigo-600 via-blue-500 to-amber-500 bg-clip-text text-transparent">2026</span>
             </h2>
 
             <p className="mt-3 text-[14px] sm:text-[15px] leading-relaxed text-slate-600 max-w-xl">
-              Celebrate the beautiful bond of love, protection, and sibling togetherness! 
-              We are preparing special greeting generators, customized digital Rakhis, and subh mahurat calculators.
+              Celebrate the divine birth of Lord Krishna!
+              We are preparing personalised greeting generators, digital wishing cards, and midnight muhurat countdowns.
               Check out our early launch page below.
             </p>
 
             <div className="mt-6 flex flex-wrap gap-4 items-center">
               <Link
-                href="/rakshabandhan-2026"
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-rose-600 to-orange-500 px-5 py-3 text-[13.5px] font-bold text-white shadow-md hover:from-rose-550 hover:to-orange-450 transition-all duration-200 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+                href="/janmashtami-2026"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-indigo-600 to-blue-500 px-5 py-3 text-[13.5px] font-bold text-white shadow-md hover:from-indigo-500 hover:to-blue-400 transition-all duration-200 hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
               >
-                Celebrate Sibling Bond
+                Send Janmashtami Wishes
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              
+
               <div className="flex items-center gap-4 text-[12px] text-slate-500 font-medium">
                 <span className="flex items-center gap-1">
-                  <Calendar className="h-4.5 w-4.5 text-rose-500" />
-                  Aug 28, 2026
+                  <Calendar className="h-4.5 w-4.5 text-indigo-500" />
+                  Sep 4, 2026
                 </span>
-                <span className="h-1 w-1 rounded-full bg-slate-350" />
+                <span className="h-1 w-1 rounded-full bg-slate-300" />
                 <span className="flex items-center gap-1">
-                  <Gift className="h-4.5 w-4.5 text-orange-500" />
+                  <Gift className="h-4.5 w-4.5 text-amber-500" />
                   Digital Wishes
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Right / Bottom side: Beautiful Rakhi Vector SVG */}
+          {/* Right / Bottom side: Peacock Feather Vector SVG */}
           <div className="md:col-span-5 flex justify-center items-center pointer-events-none">
             <div className="relative w-full max-w-50 sm:max-w-60 aspect-square flex items-center justify-center">
               <svg
                 viewBox="0 0 200 200"
-                className="w-full h-full drop-shadow-[0_10px_20px_rgba(244,63,94,0.25)] animate-pulse"
+                className="w-full h-full drop-shadow-[0_10px_20px_rgba(79,70,229,0.25)] animate-pulse"
                 style={{ animationDuration: '4s' }}
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                {/* Horizontal Threads (Rakhi Dhaaga) */}
+                {/* Soft radial glow behind the eye */}
+                <circle cx="100" cy="70" r="48" fill="url(#featherGlow)" opacity="0.3" />
+
+                {/* Barbs (fronds) fanning outward along the shaft */}
+                <g stroke="url(#barbGradient)" strokeWidth="1.6" strokeLinecap="round" opacity="0.85">
+                  {Array.from({ length: 13 }).map((_, i) => {
+                    const t = i / 12;
+                    const y = 100 + t * 82;
+                    const len = 12 + t * 26;
+                    const dy = len * 0.42;
+                    return (
+                      <g key={i}>
+                        <path d={`M100 ${y} L${100 - len} ${y - dy}`} />
+                        <path d={`M100 ${y} L${100 + len} ${y - dy}`} />
+                      </g>
+                    );
+                  })}
+                </g>
+
+                {/* Central shaft */}
                 <path
-                  d="M10 100 H190"
-                  stroke="url(#threadGradient)"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M10 100 L30 92 M10 100 L30 108 M170 92 L190 100 M170 108 L190 100"
-                  stroke="url(#threadGradient)"
+                  d="M100 188 C 98 142, 99 112, 100 92"
+                  stroke="url(#shaftGradient)"
                   strokeWidth="3"
                   strokeLinecap="round"
-                  opacity="0.75"
                 />
 
-                {/* Outer beads on threads */}
-                <circle cx="50" cy="100" r="4.5" fill="#f59e0b" />
-                <circle cx="62" cy="100" r="3.5" fill="#ef4444" />
-                <circle cx="72" cy="100" r="2.5" fill="#f59e0b" />
-                
-                <circle cx="150" cy="100" r="4.5" fill="#f59e0b" />
-                <circle cx="138" cy="100" r="3.5" fill="#ef4444" />
-                <circle cx="128" cy="100" r="2.5" fill="#f59e0b" />
+                {/* The eye (ocellus) - concentric ovals */}
+                <ellipse cx="100" cy="70" rx="33" ry="41" fill="#0d9488" />
+                <ellipse cx="100" cy="70" rx="25" ry="32" fill="#ca8a04" />
+                <ellipse cx="100" cy="71" rx="18" ry="24" fill="#1d4ed8" />
 
-                {/* Center Rakhi Structure */}
-                
-                {/* Outer Glowing Ring */}
-                <circle cx="100" cy="100" r="42" fill="url(#outerGlow)" opacity="0.3" />
-                
-                {/* Golden sun rays / thread fringe */}
-                <g className="animate-spin" style={{ animationDuration: '40s' }}>
-                  {Array.from({ length: 16 }).map((_, i) => {
-                    const angle = (i * 360) / 16;
-                    return (
-                      <path
-                        key={i}
-                        d="M100 100 L100 56"
-                        stroke="#f59e0b"
-                        strokeWidth="3.5"
-                        strokeLinecap="round"
-                        transform={`rotate(${angle} 100 100)`}
-                      />
-                    );
-                  })}
-                </g>
+                {/* Inner heart / leaf in deep indigo */}
+                <path d="M100 90 C 86 74, 85 58, 100 56 C 115 58, 114 74, 100 90 Z" fill="#312e81" />
 
-                {/* Golden Circle Base */}
-                <circle cx="100" cy="100" r="36" fill="#f59e0b" stroke="#d97706" strokeWidth="2.5" />
-
-                {/* Red Floral Petals */}
-                <g className="animate-spin" style={{ animationDuration: '30s', animationDirection: 'reverse' }}>
-                  {Array.from({ length: 8 }).map((_, i) => {
-                    const angle = (i * 360) / 8;
-                    return (
-                      <path
-                        key={i}
-                        d="M100 100 C88 75, 112 75, 100 100"
-                        fill="#ef4444"
-                        stroke="#b91c1c"
-                        strokeWidth="1"
-                        transform={`rotate(${angle} 100 100)`}
-                      />
-                    );
-                  })}
-                </g>
-
-                {/* Small Gold Inner Ring */}
-                <circle cx="100" cy="100" r="20" fill="#fffbeb" stroke="#f59e0b" strokeWidth="2" />
-                
-                {/* Center Star / Flower detail */}
+                {/* Bright cyan crescent highlight */}
                 <path
-                  d="M100 88 L103 97 L112 100 L103 103 L100 112 L97 103 L88 100 L97 97 Z"
-                  fill="#d91b5c"
+                  d="M100 87 C 91 78, 91 66, 99 60"
+                  stroke="#22d3ee"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  fill="none"
                 />
-
-                {/* Pearl Bead in the center */}
-                <circle cx="100" cy="100" r="5" fill="white" />
-                <circle cx="98.5" cy="98.5" r="1.5" fill="#fef2f2" opacity="0.8" />
+                <circle cx="100" cy="62" r="3" fill="#a5f3fc" />
 
                 {/* Definitions for Gradients */}
                 <defs>
-                  <linearGradient id="threadGradient" x1="10" y1="100" x2="190" y2="100" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stopColor="#f59e0b" stopOpacity="0" />
-                    <stop offset="25%" stopColor="#ef4444" />
-                    <stop offset="50%" stopColor="#f59e0b" />
-                    <stop offset="75%" stopColor="#ef4444" />
-                    <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+                  <linearGradient id="barbGradient" x1="100" y1="90" x2="100" y2="185" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#0d9488" />
+                    <stop offset="55%" stopColor="#0891b2" />
+                    <stop offset="100%" stopColor="#2563eb" />
                   </linearGradient>
-                  
-                  <radialGradient id="outerGlow" cx="100" cy="100" r="42" gradientUnits="userSpaceOnUse">
-                    <stop offset="40%" stopColor="#f59e0b" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#ef4444" stopOpacity="0" />
+
+                  <linearGradient id="shaftGradient" x1="100" y1="92" x2="100" y2="188" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#ca8a04" />
+                    <stop offset="100%" stopColor="#15803d" />
+                  </linearGradient>
+
+                  <radialGradient id="featherGlow" cx="100" cy="70" r="48" gradientUnits="userSpaceOnUse">
+                    <stop offset="40%" stopColor="#4f46e5" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#0d9488" stopOpacity="0" />
                   </radialGradient>
                 </defs>
               </svg>
-              
+
               {/* Extra little decorative stars */}
               <div className="absolute top-4 right-4 text-amber-400 animate-bounce" style={{ animationDuration: '3s' }}>
                 <Sparkles className="h-4 w-4 fill-current" />
               </div>
-              <div className="absolute bottom-6 left-2 text-rose-500 animate-bounce" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }}>
+              <div className="absolute bottom-6 left-2 text-indigo-500 animate-bounce" style={{ animationDuration: '2.5s', animationDelay: '0.5s' }}>
                 <Sparkles className="h-4.5 w-4.5 fill-current" />
               </div>
             </div>
           </div>
-          
+
         </div>
       </div>
     </div>

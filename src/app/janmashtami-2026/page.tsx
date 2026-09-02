@@ -3,9 +3,9 @@
 import { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { 
-  Sparkles, Calendar, Gift, Clock, Heart, Award, ArrowRight, 
-  ChevronRight, Share2, Copy, Check, RefreshCw, Eye, User, ArrowLeft 
+import {
+  Sparkles, Gift, Clock, Heart, Award, ArrowRight,
+  ChevronRight, Share2, Copy, Check, RefreshCw, Eye, User, ArrowLeft
 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -32,7 +32,7 @@ interface WishDetails {
   views: number;
 }
 
-function RakshaBandhanContent() {
+function JanmashtamiContent() {
   const [cardId, setCardId] = useState<string | null>(null);
   const [wish, setWish] = useState<WishDetails | null>(null);
   const [loadingCard, setLoadingCard] = useState(false);
@@ -79,7 +79,7 @@ function RakshaBandhanContent() {
     setLoadingCard(true);
     setErrorCard(null);
     try {
-      const res = await fetch(`/api/rakhi?id=${id}`);
+      const res = await fetch(`/api/janmashtami?id=${id}`);
       const data = await res.json();
       if (data.success) {
         setWish(data.wish);
@@ -106,17 +106,17 @@ function RakshaBandhanContent() {
 
   const loadDashboard = async () => {
     try {
-      const stored = localStorage.getItem("toolnagri_rakhi_cards");
+      const stored = localStorage.getItem("toolnagri_janmashtami_cards");
       if (stored) {
         const cards: LocalCard[] = JSON.parse(stored);
         setMyCards(cards);
-        
+
         // Hydrate view counts for all dashboard cards asynchronously
         setRefreshingDashboard(true);
         const updatedCards = await Promise.all(
           cards.map(async (card) => {
             try {
-              const res = await fetch(`/api/rakhi?id=${card.id}&track=true`);
+              const res = await fetch(`/api/janmashtami?id=${card.id}&track=true`);
               const data = await res.json();
               if (data.success) {
                 return { ...card, views: data.wish.views };
@@ -128,7 +128,7 @@ function RakshaBandhanContent() {
           })
         );
         setMyCards(updatedCards);
-        localStorage.setItem("toolnagri_rakhi_cards", JSON.stringify(updatedCards));
+        localStorage.setItem("toolnagri_janmashtami_cards", JSON.stringify(updatedCards));
       }
     } catch (e) {
       console.error("Failed to load dashboard:", e);
@@ -137,9 +137,9 @@ function RakshaBandhanContent() {
     }
   };
 
-  // 4. Live Countdown to August 28, 2026
+  // 4. Live Countdown to September 4, 2026
   useEffect(() => {
-    const targetDate = new Date("2026-08-28T00:00:00").getTime();
+    const targetDate = new Date("2026-09-04T00:00:00").getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
@@ -171,14 +171,14 @@ function RakshaBandhanContent() {
         angle: 60,
         spread: 55,
         origin: { x: 0 },
-        colors: ["#f59e0b", "#ef4444", "#ec4899", "#d97706"],
+        colors: ["#4f46e5", "#2563eb", "#0d9488", "#f59e0b", "#facc15"],
       });
       confetti({
         particleCount: 3,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
-        colors: ["#f59e0b", "#ef4444", "#ec4899", "#d97706"],
+        colors: ["#4f46e5", "#2563eb", "#0d9488", "#f59e0b", "#facc15"],
       });
 
       if (Date.now() < end) {
@@ -197,7 +197,7 @@ function RakshaBandhanContent() {
     setJustGeneratedId(null);
 
     try {
-      const res = await fetch("/api/rakhi", {
+      const res = await fetch("/api/janmashtami", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sender, receiver, lang }),
@@ -210,7 +210,7 @@ function RakshaBandhanContent() {
         triggerFestivalConfetti();
 
         // Save to dashboard
-        const stored = localStorage.getItem("toolnagri_rakhi_cards");
+        const stored = localStorage.getItem("toolnagri_janmashtami_cards");
         const cards: LocalCard[] = stored ? JSON.parse(stored) : [];
         const newCard: LocalCard = {
           id: data.id,
@@ -220,7 +220,7 @@ function RakshaBandhanContent() {
           views: 0,
         };
         cards.unshift(newCard);
-        localStorage.setItem("toolnagri_rakhi_cards", JSON.stringify(cards));
+        localStorage.setItem("toolnagri_janmashtami_cards", JSON.stringify(cards));
         setMyCards(cards);
       } else {
         alert(data.error || "Generation failed. Please try again.");
@@ -238,33 +238,33 @@ function RakshaBandhanContent() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Sibling Poetry Lists
+  // Krishna Janmashtami Poetry Lists
   const poetryList = {
     en: [
-      "A bond of love, a bond of care,",
-      "A relationship so rich and rare.",
-      "Through laughs and fights, we grew together,",
-      "This sibling bond will last forever.",
+      "On this holy midnight hour,",
+      "Little Krishna shows his power.",
+      "With flute and feather, blue and gold,",
+      "May his blessings your life enfold.",
     ],
     hi: [
-      "रेशम के धागों का है यह मजबूत बंधन,",
-      "स्नेह और सुरक्षा का है यह पावन अभिनंदन।",
-      "दुआ है मेरी खुश रहे सदा भाई और बहन,",
-      "मुबारक हो आपको रक्षाबंधन का यह पावन पर्व।"
+      "नंद के आनंद भयो, जय कन्हैया लाल की,",
+      "मोर मुकुट बंशीधर की, जय गिरधर गोपाल की।",
+      "आओ मिलकर झूमें गाएं, कान्हा का त्योहार है,",
+      "जन्माष्टमी की शुभकामनाएं, राधे-कृष्ण का प्यार है।"
     ]
   };
 
   // Render Wishing Card Mode
   if (cardId) {
     return (
-      <div className="min-h-screen pb-20 bg-linear-to-b from-[#fff7ed] via-[#fffbeb] to-background">
+      <div className="min-h-screen pb-20 bg-linear-to-b from-[#eef2ff] via-[#eff6ff] to-background">
         <div className="mx-auto max-w-2xl px-4 py-12 text-center space-y-8">
-          
+
           {/* Back button */}
           <div className="flex justify-start">
             <Link
-              href="/rakshabandhan-2026"
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 border border-rose-100 rounded-lg px-3 py-1.5 shadow-sm transition-all"
+              href="/janmashtami-2026"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-700 bg-indigo-50 border border-indigo-100 rounded-lg px-3 py-1.5 shadow-sm transition-all"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               Create Your Wishing Card
@@ -272,21 +272,21 @@ function RakshaBandhanContent() {
           </div>
 
           {loadingCard && (
-            <div className="rounded-3xl border border-rose-100 bg-card-bg shadow-premium p-12 space-y-6 animate-pulse">
-              <div className="h-10 w-40 bg-rose-100 rounded-full mx-auto" />
+            <div className="rounded-3xl border border-indigo-100 bg-card-bg shadow-premium p-12 space-y-6 animate-pulse">
+              <div className="h-10 w-40 bg-indigo-100 rounded-full mx-auto" />
               <div className="h-40 w-40 bg-amber-100 rounded-full mx-auto" />
-              <div className="h-8 w-60 bg-rose-100 rounded-lg mx-auto" />
+              <div className="h-8 w-60 bg-indigo-100 rounded-lg mx-auto" />
               <div className="h-20 w-80 bg-slate-100 rounded-lg mx-auto" />
             </div>
           )}
 
           {errorCard && (
-            <div className="rounded-3xl border border-rose-200 bg-red-50 p-10 space-y-4">
+            <div className="rounded-3xl border border-indigo-200 bg-red-50 p-10 space-y-4">
               <h2 className="font-heading text-xl font-bold text-red-700">Wishing Card Unavailable</h2>
-              <p className="text-sm text-red-650">{errorCard}</p>
+              <p className="text-sm text-red-600">{errorCard}</p>
               <Link
-                href="/rakshabandhan-2026"
-                className="inline-flex items-center justify-center rounded-xl bg-rose-600 px-5 py-2.5 text-[13px] font-bold text-white hover:bg-rose-700 shadow-sm transition-colors"
+                href="/janmashtami-2026"
+                className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-2.5 text-[13px] font-bold text-white hover:bg-indigo-700 shadow-sm transition-colors"
               >
                 Go Create New Link
               </Link>
@@ -296,97 +296,96 @@ function RakshaBandhanContent() {
           {wish && (
             <div className="relative">
               {/* Outer Glow */}
-              <div className="absolute inset-0 bg-linear-to-r from-orange-400 via-rose-400 to-amber-400 rounded-3xl blur-xl opacity-15 pointer-events-none" />
+              <div className="absolute inset-0 bg-linear-to-r from-indigo-400 via-blue-400 to-teal-400 rounded-3xl blur-xl opacity-15 pointer-events-none" />
 
-              <div className="festival-shimmer-bg relative rounded-3xl border border-rose-100 bg-linear-to-br from-[#ffffff] to-[#fffcf9] p-8 sm:p-12 shadow-premium space-y-8">
-                
+              <div className="festival-shimmer-bg relative rounded-3xl border border-indigo-100 bg-linear-to-br from-[#ffffff] to-[#f9fbff] p-8 sm:p-12 shadow-premium space-y-8">
+
                 {/* Header Greeting */}
                 <div className="space-y-3">
-                  <span className="inline-flex items-center gap-1 rounded-full bg-rose-50 px-3 py-1 text-xs font-bold text-rose-600 border border-rose-100">
-                    <Sparkles className="h-3.5 w-3.5 fill-rose-600/20" />
+                  <span className="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-3 py-1 text-xs font-bold text-indigo-600 border border-indigo-100">
+                    <Sparkles className="h-3.5 w-3.5 fill-indigo-600/20" />
                     Special Greeting
                   </span>
-                  
+
                   {wish.lang === "hi" ? (
-                    <h1 className="font-heading text-2xl sm:text-3xl font-black text-rose-600 leading-snug">
-                      रक्षाबंधन की हार्दिक शुभकामनाएं
+                    <h1 className="font-heading text-2xl sm:text-3xl font-black text-indigo-600 leading-snug">
+                      कृष्ण जन्माष्टमी की हार्दिक शुभकामनाएं
                     </h1>
                   ) : (
-                    <h1 className="font-heading text-2xl sm:text-3xl font-black text-rose-600 leading-snug">
-                      Happy Raksha Bandhan
+                    <h1 className="font-heading text-2xl sm:text-3xl font-black text-indigo-600 leading-snug">
+                      Happy Krishna Janmashtami
                     </h1>
                   )}
                 </div>
 
-                {/* Animated Center Rakhi */}
+                {/* Animated Peacock Feather */}
                 <div className="flex justify-center">
                   <div className="relative w-44 sm:w-52 aspect-square flex items-center justify-center">
                     <svg
                       viewBox="0 0 200 200"
-                      className="w-full h-full drop-shadow-[0_10px_20px_rgba(244,63,94,0.25)] animate-pulse"
+                      className="w-full h-full drop-shadow-[0_10px_20px_rgba(79,70,229,0.25)] animate-pulse"
                       style={{ animationDuration: '4s' }}
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      {/* Threads */}
-                      <path d="M10 100 H190" stroke="url(#threadGradient)" strokeWidth="6" strokeLinecap="round" />
-                      <circle cx="50" cy="100" r="4.5" fill="#f59e0b" />
-                      <circle cx="62" cy="100" r="3.5" fill="#ef4444" />
-                      <circle cx="150" cy="100" r="4.5" fill="#f59e0b" />
-                      <circle cx="138" cy="100" r="3.5" fill="#ef4444" />
-                      
-                      {/* Rakhi center structure */}
-                      <circle cx="100" cy="100" r="42" fill="url(#outerGlow)" opacity="0.3" />
-                      <g className="animate-spin" style={{ animationDuration: '40s' }}>
-                        {Array.from({ length: 16 }).map((_, i) => {
-                          const angle = (i * 360) / 16;
+                      {/* Soft radial glow behind the eye */}
+                      <circle cx="100" cy="70" r="48" fill="url(#featherGlow)" opacity="0.3" />
+
+                      {/* Barbs (fronds) fanning outward along the shaft */}
+                      <g stroke="url(#barbGradient)" strokeWidth="1.6" strokeLinecap="round" opacity="0.85">
+                        {Array.from({ length: 13 }).map((_, i) => {
+                          const t = i / 12;
+                          const y = 100 + t * 82;
+                          const len = 12 + t * 26;
+                          const dy = len * 0.42;
                           return (
-                            <path
-                              key={i}
-                              d="M100 100 L100 56"
-                              stroke="#f59e0b"
-                              strokeWidth="3.5"
-                              strokeLinecap="round"
-                              transform={`rotate(${angle} 100 100)`}
-                            />
+                            <g key={i}>
+                              <path d={`M100 ${y} L${100 - len} ${y - dy}`} />
+                              <path d={`M100 ${y} L${100 + len} ${y - dy}`} />
+                            </g>
                           );
                         })}
                       </g>
-                      <circle cx="100" cy="100" r="36" fill="#f59e0b" stroke="#d97706" strokeWidth="2.5" />
-                      
-                      <g className="animate-spin" style={{ animationDuration: '30s', animationDirection: 'reverse' }}>
-                        {Array.from({ length: 8 }).map((_, i) => {
-                          const angle = (i * 360) / 8;
-                          return (
-                            <path
-                              key={i}
-                              d="M100 100 C88 75, 112 75, 100 100"
-                              fill="#ef4444"
-                              stroke="#b91c1c"
-                              strokeWidth="1"
-                              transform={`rotate(${angle} 100 100)`}
-                            />
-                          );
-                        })}
-                      </g>
-                      <circle cx="100" cy="100" r="20" fill="#fffbeb" stroke="#f59e0b" strokeWidth="2" />
+
+                      {/* Central shaft */}
                       <path
-                        d="M100 88 L103 97 L112 100 L103 103 L100 112 L97 103 L88 100 L97 97 Z"
-                        fill="#d91b5c"
+                        d="M100 188 C 98 142, 99 112, 100 92"
+                        stroke="url(#shaftGradient)"
+                        strokeWidth="3"
+                        strokeLinecap="round"
                       />
-                      <circle cx="100" cy="100" r="5" fill="white" />
-                      <circle cx="98.5" cy="98.5" r="1.5" fill="#fef2f2" opacity="0.8" />
+
+                      {/* The eye (ocellus) - concentric ovals */}
+                      <ellipse cx="100" cy="70" rx="33" ry="41" fill="#0d9488" />
+                      <ellipse cx="100" cy="70" rx="25" ry="32" fill="#ca8a04" />
+                      <ellipse cx="100" cy="71" rx="18" ry="24" fill="#1d4ed8" />
+
+                      {/* Inner heart / leaf in deep indigo */}
+                      <path d="M100 90 C 86 74, 85 58, 100 56 C 115 58, 114 74, 100 90 Z" fill="#312e81" />
+
+                      {/* Bright cyan crescent highlight */}
+                      <path
+                        d="M100 87 C 91 78, 91 66, 99 60"
+                        stroke="#22d3ee"
+                        strokeWidth="4"
+                        strokeLinecap="round"
+                        fill="none"
+                      />
+                      <circle cx="100" cy="62" r="3" fill="#a5f3fc" />
+
                       <defs>
-                        <linearGradient id="threadGradient" x1="10" y1="100" x2="190" y2="100" gradientUnits="userSpaceOnUse">
-                          <stop offset="0%" stopColor="#f59e0b" stopOpacity="0" />
-                          <stop offset="25%" stopColor="#ef4444" />
-                          <stop offset="50%" stopColor="#f59e0b" />
-                          <stop offset="75%" stopColor="#ef4444" />
-                          <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+                        <linearGradient id="barbGradient" x1="100" y1="90" x2="100" y2="185" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#0d9488" />
+                          <stop offset="55%" stopColor="#0891b2" />
+                          <stop offset="100%" stopColor="#2563eb" />
                         </linearGradient>
-                        <radialGradient id="outerGlow" cx="100" cy="100" r="42" gradientUnits="userSpaceOnUse">
-                          <stop offset="40%" stopColor="#f59e0b" stopOpacity="1" />
-                          <stop offset="100%" stopColor="#ef4444" stopOpacity="0" />
+                        <linearGradient id="shaftGradient" x1="100" y1="92" x2="100" y2="188" gradientUnits="userSpaceOnUse">
+                          <stop offset="0%" stopColor="#ca8a04" />
+                          <stop offset="100%" stopColor="#15803d" />
+                        </linearGradient>
+                        <radialGradient id="featherGlow" cx="100" cy="70" r="48" gradientUnits="userSpaceOnUse">
+                          <stop offset="40%" stopColor="#4f46e5" stopOpacity="0.9" />
+                          <stop offset="100%" stopColor="#0d9488" stopOpacity="0" />
                         </radialGradient>
                       </defs>
                     </svg>
@@ -395,44 +394,44 @@ function RakshaBandhanContent() {
 
                 {/* Wishing Message Details */}
                 <div className="space-y-4">
-                  <div className="inline-block bg-rose-50/50 border border-rose-100 rounded-2xl px-6 py-4">
+                  <div className="inline-block bg-indigo-50/50 border border-indigo-100 rounded-2xl px-6 py-4">
                     {wish.lang === "hi" ? (
                       <p className="text-lg sm:text-xl text-slate-800 leading-relaxed">
-                        <strong className="text-rose-600 font-extrabold">{wish.sender}</strong>,{" "}
-                        <span className="font-medium">अपने प्यारे</span>{" "}
-                        <strong className="text-orange-600 font-extrabold">{wish.receiver}</strong>{" "}
-                        को रक्षाबंधन की ढेर सारी बधाई और स्नेह भेज रहे हैं! ❤️🌸
+                        <strong className="text-indigo-600 font-extrabold">{wish.sender}</strong>,{" "}
+                        <span className="font-medium">अपने प्रिय</span>{" "}
+                        <strong className="text-amber-600 font-extrabold">{wish.receiver}</strong>{" "}
+                        को कृष्ण जन्माष्टमी की हार्दिक शुभकामनाएं भेज रहे हैं! 🦚🪈
                       </p>
                     ) : (
                       <p className="text-lg sm:text-xl text-slate-800 leading-relaxed font-light">
-                        <strong className="text-rose-600 font-extrabold">{wish.sender}</strong> is wishing{" "}
-                        <strong className="text-orange-600 font-extrabold">{wish.receiver}</strong> a warm and sweet{" "}
-                        <span className="font-semibold text-rose-500">Happy Raksha Bandhan!</span> ❤️🌸
+                        <strong className="text-indigo-600 font-extrabold">{wish.sender}</strong> is wishing{" "}
+                        <strong className="text-amber-600 font-extrabold">{wish.receiver}</strong> a blessed and joyful{" "}
+                        <span className="font-semibold text-indigo-500">Krishna Janmashtami!</span> 🦚🪈
                       </p>
                     )}
                   </div>
 
                   {/* Poetry Block */}
                   <div className="py-2 italic text-slate-600 font-medium text-sm sm:text-base space-y-1 relative">
-                    <span className="absolute -top-3 left-6 text-4xl text-rose-250 font-serif opacity-30">“</span>
+                    <span className="absolute -top-3 left-6 text-4xl text-indigo-200 font-serif opacity-30">“</span>
                     {(wish.lang === "hi" ? poetryList.hi : poetryList.en).map((line, idx) => (
                       <p key={idx}>{line}</p>
                     ))}
-                    <span className="absolute -bottom-6 right-6 text-4xl text-rose-250 font-serif opacity-30">”</span>
+                    <span className="absolute -bottom-6 right-6 text-4xl text-indigo-200 font-serif opacity-30">”</span>
                   </div>
                 </div>
 
                 {/* Tracking Badge in Page */}
                 <div className="pt-4 flex items-center justify-center gap-1.5 text-xs text-slate-500 font-semibold">
                   <Eye className="h-4 w-4 text-slate-400" />
-                  This wish card has been opened <span className="text-rose-600 font-bold">{wish.views}</span> times.
+                  This wish card has been opened <span className="text-indigo-600 font-bold">{wish.views}</span> times.
                 </div>
 
                 {/* Card CTA & Sharing Options */}
                 <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row gap-4 justify-center items-center">
                   <Link
                     href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                      `${wish.sender} ${wish.lang === 'hi' ? 'ने भेजा है आपके लिए रक्षाबंधन का ख़ास संदेश' : 'sent a special Raksha Bandhan wishing card for you'}! 🌸✨\n\nपढ़ें यहाँ: ${window.location.origin}/rakshabandhan-2026?id=${cardId}`
+                      `${wish.sender} ${wish.lang === 'hi' ? 'ने भेजा है आपके लिए कृष्ण जन्माष्टमी का ख़ास संदेश' : 'sent a special Krishna Janmashtami wishing card for you'}! 🦚🪈\n\n${wish.lang === 'hi' ? 'पढ़ें यहाँ' : 'Open here'}: ${window.location.origin}/janmashtami-2026?id=${cardId}`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -464,14 +463,14 @@ function RakshaBandhanContent() {
             </div>
           )}
 
-          {/* Sibling card generator promotion */}
+          {/* Wishing card generator promotion */}
           <div className="pt-4">
             <Link
-              href="/rakshabandhan-2026"
+              href="/janmashtami-2026"
               onClick={() => {
                 setCardId(null);
                 setWish(null);
-                window.history.pushState({}, "", "/rakshabandhan-2026");
+                window.history.pushState({}, "", "/janmashtami-2026");
               }}
               className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-800 transition-colors font-bold underline"
             >
@@ -487,18 +486,18 @@ function RakshaBandhanContent() {
   return (
     <div className="min-h-screen pb-20 bg-background">
       {/* ────────────────────────── Header Banner/Hero ────────────────────────── */}
-      <div className="relative overflow-hidden bg-linear-to-br from-rose-900 via-orange-850 to-amber-900 text-white py-16 md:py-24 border-b border-rose-805">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-amber-200 via-rose-300 to-transparent pointer-events-none" />
-        
+      <div className="relative overflow-hidden bg-linear-to-br from-indigo-950 via-blue-900 to-purple-900 text-white py-16 md:py-24 border-b border-indigo-800">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-amber-200 via-indigo-300 to-transparent pointer-events-none" />
+
         {/* Glowing floating lights */}
-        <div className="absolute top-1/4 left-1/4 h-32 w-32 rounded-full bg-orange-500/20 blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 h-32 w-32 rounded-full bg-rose-500/20 blur-3xl pointer-events-none animate-pulse" style={{ animationDelay: "2s" }} />
+        <div className="absolute top-1/4 left-1/4 h-32 w-32 rounded-full bg-blue-500/20 blur-3xl pointer-events-none animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 h-32 w-32 rounded-full bg-amber-500/20 blur-3xl pointer-events-none animate-pulse" style={{ animationDelay: "2s" }} />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-          <nav className="flex justify-center items-center gap-2 text-xs font-semibold text-rose-200 uppercase tracking-wider mb-2">
+          <nav className="flex justify-center items-center gap-2 text-xs font-semibold text-indigo-200 uppercase tracking-wider mb-2">
             <Link href="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="h-3 w-3" />
-            <span className="text-amber-200">Raksha Bandhan 2026</span>
+            <span className="text-amber-200">Krishna Janmashtami 2026</span>
           </nav>
 
           <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/20 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-300 border border-amber-500/30">
@@ -507,31 +506,31 @@ function RakshaBandhanContent() {
           </span>
 
           <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight">
-            Raksha Bandhan <span className="bg-linear-to-r from-amber-300 via-orange-400 to-rose-400 bg-clip-text text-transparent">2026</span>
+            Krishna Janmashtami <span className="bg-linear-to-r from-amber-300 via-yellow-400 to-amber-500 bg-clip-text text-transparent">2026</span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-base sm:text-lg text-rose-100/90 leading-relaxed font-light">
-            Create customized wishing cards in Hindi or English, share them instantly on WhatsApp, and track how many times your relatives opened the link!
+          <p className="max-w-2xl mx-auto text-base sm:text-lg text-indigo-100/90 leading-relaxed font-light">
+            Create customized wishing cards in Hindi or English, share them instantly on WhatsApp, and track how many times your friends and family opened the link!
           </p>
         </div>
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 space-y-12">
-        
+
         {/* Countdown */}
         <section className="bg-card-bg border border-border-color rounded-3xl p-6 sm:p-8 shadow-premium text-center">
           <div className="max-w-3xl mx-auto space-y-6">
-            <div className="flex items-center justify-center gap-2 text-rose-600">
+            <div className="flex items-center justify-center gap-2 text-indigo-600">
               <Clock className="h-5 w-5 animate-pulse" />
               <h2 className="font-heading text-sm sm:text-base font-bold uppercase tracking-wider">
                 Festive Countdown
               </h2>
             </div>
-            
+
             {timeLeft.isPast ? (
               <div className="space-y-3">
-                <h3 className="font-heading text-3xl sm:text-4xl font-extrabold text-rose-600 animate-bounce">
-                  Happy Raksha Bandhan 2026! 🎉
+                <h3 className="font-heading text-3xl sm:text-4xl font-extrabold text-indigo-600 animate-bounce">
+                  Happy Krishna Janmashtami 2026! 🎉
                 </h3>
               </div>
             ) : (
@@ -561,16 +560,16 @@ function RakshaBandhanContent() {
 
         {/* ────────────────────────── Generator & Generated Result ────────────────────────── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
+
           {/* Generator Form Section */}
           <section className="lg:col-span-7 bg-card-bg border border-border-color rounded-3xl p-6 sm:p-8 shadow-premium space-y-6">
             <div className="space-y-1.5">
               <h2 className="font-heading text-xl font-extrabold text-slate-800 flex items-center gap-2">
-                <Gift className="h-5 w-5 text-rose-500" />
+                <Gift className="h-5 w-5 text-indigo-500" />
                 Generate Wishing Link
               </h2>
               <p className="text-xs text-secondary-text">
-                Fill in the details to create your customized festival greeting thread.
+                Fill in the details to create your personalised Krishna Janmashtami greeting.
               </p>
             </div>
 
@@ -590,14 +589,14 @@ function RakshaBandhanContent() {
                       onChange={(e) => setSender(e.target.value)}
                       placeholder="e.g. Rahul"
                       maxLength={50}
-                      className="block w-full rounded-xl border border-border-color pl-10 pr-4 py-2.5 text-sm text-primary-text placeholder-secondary-text/60 focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
+                      className="block w-full rounded-xl border border-border-color pl-10 pr-4 py-2.5 text-sm text-primary-text placeholder-secondary-text/60 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1.5">
                   <label htmlFor="receiver" className="block text-xs font-bold text-slate-700 uppercase tracking-wide">
-                    Sibling Name (Receiver)
+                    Recipient Name (Receiver)
                   </label>
                   <div className="relative">
                     <Heart className="absolute left-3.5 top-3 h-4 w-4 text-slate-400" />
@@ -606,9 +605,9 @@ function RakshaBandhanContent() {
                       id="receiver"
                       value={receiver}
                       onChange={(e) => setReceiver(e.target.value)}
-                      placeholder="e.g. Priya (defaults to 'Everyone')"
+                      placeholder="e.g. Meera (defaults to 'Everyone')"
                       maxLength={50}
-                      className="block w-full rounded-xl border border-border-color pl-10 pr-4 py-2.5 text-sm text-primary-text placeholder-secondary-text/60 focus:border-rose-500 focus:outline-none focus:ring-1 focus:ring-rose-500"
+                      className="block w-full rounded-xl border border-border-color pl-10 pr-4 py-2.5 text-sm text-primary-text placeholder-secondary-text/60 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                     />
                   </div>
                 </div>
@@ -625,7 +624,7 @@ function RakshaBandhanContent() {
                     onClick={() => setLang("hi")}
                     className={`flex-1 py-2.5 rounded-xl border text-sm font-bold transition-all ${
                       lang === "hi"
-                        ? "bg-rose-50 border-rose-500 text-rose-600 shadow-sm"
+                        ? "bg-indigo-50 border-indigo-500 text-indigo-600 shadow-sm"
                         : "border-border-color hover:bg-slate-50 text-slate-600"
                     }`}
                   >
@@ -636,7 +635,7 @@ function RakshaBandhanContent() {
                     onClick={() => setLang("en")}
                     className={`flex-1 py-2.5 rounded-xl border text-sm font-bold transition-all ${
                       lang === "en"
-                        ? "bg-rose-50 border-rose-500 text-rose-600 shadow-sm"
+                        ? "bg-indigo-50 border-indigo-500 text-indigo-600 shadow-sm"
                         : "border-border-color hover:bg-slate-50 text-slate-600"
                     }`}
                   >
@@ -648,7 +647,7 @@ function RakshaBandhanContent() {
               <button
                 type="submit"
                 disabled={generating}
-                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-rose-600 to-orange-500 py-3 text-sm font-bold text-white shadow-md hover:from-rose-550 hover:to-orange-450 transition-all duration-200 active:scale-[0.99] disabled:opacity-50"
+                className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-indigo-600 to-blue-500 py-3 text-sm font-bold text-white shadow-md hover:from-indigo-500 hover:to-blue-400 transition-all duration-200 active:scale-[0.99] disabled:opacity-50"
               >
                 {generating ? (
                   <>
@@ -693,7 +692,7 @@ function RakshaBandhanContent() {
                   <div className="flex flex-col sm:flex-row gap-3 pt-1">
                     <Link
                       href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
-                        `${sender} ${lang === 'hi' ? 'ने भेजा है आपके लिए रक्षाबंधन का ख़ास संदेश' : 'sent a special Raksha Bandhan wishing card for you'}! 🌸✨\n\nपढ़ें यहाँ: ${generatedLink}`
+                        `${sender} ${lang === 'hi' ? 'ने भेजा है आपके लिए कृष्ण जन्माष्टमी का ख़ास संदेश' : 'sent a special Krishna Janmashtami wishing card for you'}! 🦚🪈\n\n${lang === 'hi' ? 'पढ़ें यहाँ' : 'Open here'}: ${generatedLink}`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -704,7 +703,7 @@ function RakshaBandhanContent() {
                     </Link>
 
                     <Link
-                      href={`/rakshabandhan-2026?id=${justGeneratedId}`}
+                      href={`/janmashtami-2026?id=${justGeneratedId}`}
                       className="flex-1 inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-colors"
                     >
                       <Eye className="h-4 w-4 text-slate-500" />
@@ -721,7 +720,7 @@ function RakshaBandhanContent() {
             <div className="flex items-center justify-between">
               <div className="space-y-1">
                 <h2 className="font-heading text-lg font-extrabold text-slate-800 flex items-center gap-2">
-                  <Award className="h-5 w-5 text-rose-500 animate-pulse" />
+                  <Award className="h-5 w-5 text-indigo-500 animate-pulse" />
                   Live Visitor Stats
                 </h2>
                 <p className="text-[11px] text-secondary-text">
@@ -741,7 +740,7 @@ function RakshaBandhanContent() {
 
             {myCards.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 text-rose-500">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-50 text-indigo-500">
                   <Eye className="h-6 w-6" />
                 </div>
                 <div className="space-y-1">
@@ -765,7 +764,7 @@ function RakshaBandhanContent() {
                           <span className="truncate text-xs font-bold text-slate-800">
                             {card.sender} ➔ {card.receiver}
                           </span>
-                          <span className="text-[9px] font-bold uppercase tracking-wider text-rose-500 bg-rose-50 border border-rose-100 rounded px-1.5 py-0.5 shrink-0">
+                          <span className="text-[9px] font-bold uppercase tracking-wider text-indigo-500 bg-indigo-50 border border-indigo-100 rounded px-1.5 py-0.5 shrink-0">
                             {card.lang}
                           </span>
                         </div>
@@ -774,7 +773,7 @@ function RakshaBandhanContent() {
                           <span>
                             {card.views !== undefined ? (
                               <>
-                                <strong className="text-rose-600 font-extrabold">{card.views}</strong> views
+                                <strong className="text-indigo-600 font-extrabold">{card.views}</strong> views
                               </>
                             ) : (
                               "loading..."
@@ -793,7 +792,7 @@ function RakshaBandhanContent() {
                           <Copy className="h-3.5 w-3.5" />
                         </button>
                         <Link
-                          href={`/rakshabandhan-2026?id=${card.id}`}
+                          href={`/janmashtami-2026?id=${card.id}`}
                           className="p-2 border border-border-color bg-card-bg hover:bg-secondary-bg rounded-lg text-slate-600 transition-colors shadow-sm"
                           title="Open Card"
                         >
@@ -809,18 +808,18 @@ function RakshaBandhanContent() {
         </div>
 
         {/* ────────────────────────── Feature Suggestion Form ────────────────────────── */}
-        <section className="bg-linear-to-r from-secondary-bg/60 to-rose-50/20 border border-border-color rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-center justify-between">
+        <section className="bg-linear-to-r from-secondary-bg/60 to-indigo-50/30 border border-border-color rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row gap-6 items-center justify-between">
           <div className="space-y-1.5 text-center sm:text-left">
             <h3 className="font-heading text-lg font-bold text-primary-text">
-              Have a special feature request for Rakshabandhan?
+              Have a special feature request for Janmashtami?
             </h3>
             <p className="text-[13px] text-secondary-text max-w-xl">
-              We build tools directly requested by our community. Let us know if you want a custom gift budget calculator, sibling memory builder, or anything else!
+              We build tools directly requested by our community. Let us know if you want a custom Dahi Handi countdown, a bhajan playlist, or anything else!
             </p>
           </div>
-          
+
           <Link
-            href="/contact?ref=rakshabandhan"
+            href="/contact?ref=janmashtami"
             className="shrink-0 rounded-xl border border-border-color bg-card-bg px-5 py-3 text-[13.5px] font-bold text-primary-text transition-colors hover:bg-secondary-bg shadow-sm"
           >
             Submit Suggestion
@@ -831,17 +830,17 @@ function RakshaBandhanContent() {
   );
 }
 
-export default function RakshaBandhanPage() {
+export default function JanmashtamiPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4 text-center">
-          <RefreshCw className="h-8 w-8 text-rose-500 animate-spin" />
+          <RefreshCw className="h-8 w-8 text-indigo-500 animate-spin" />
           <p className="text-sm font-semibold text-secondary-text">Loading wishing card hub...</p>
         </div>
       </div>
     }>
-      <RakshaBandhanContent />
+      <JanmashtamiContent />
     </Suspense>
   );
 }

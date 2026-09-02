@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const DB_NAME = "toolnagri";
-const COLLECTION_NAME = "rakhi_wishes";
+const COLLECTION_NAME = "janmashtami_wishes";
 
 // Helper to generate a random 8-character unique ID
 function generateSlug(): string {
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error("API GET /api/rakhi failed:", error);
+    console.error("API GET /api/janmashtami failed:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 }
@@ -137,7 +137,7 @@ export async function POST(request: NextRequest) {
     const telegramChatId = process.env.TELEGRAM_CHAT_ID;
     if (telegramToken && telegramChatId) {
       const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-      const message = `🎉 <b>New Rakhi Wishing Card Created!</b>\n\n👤 <b>Sender:</b> ${cleanSender}\n👥 <b>Receiver:</b> ${cleanReceiver}\n🌐 <b>Language:</b> ${cleanLang === "hi" ? "Hindi 🇮🇳" : "English 🇬🇧"}\n🔑 <b>Slug ID:</b> <code>${slug}</code>\n🔗 <b>Card URL:</b> ${siteUrl}/rakshabandhan-2026?id=${slug}`;
+      const message = `🦚 <b>New Janmashtami Wishing Card Created!</b>\n\n👤 <b>Sender:</b> ${cleanSender}\n👥 <b>Receiver:</b> ${cleanReceiver}\n🌐 <b>Language:</b> ${cleanLang === "hi" ? "Hindi 🇮🇳" : "English 🇬🇧"}\n🔑 <b>Slug ID:</b> <code>${slug}</code>\n🔗 <b>Card URL:</b> ${siteUrl}/janmashtami-2026?id=${slug}`;
 
       fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
         method: "POST",
@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
       id: slug,
     });
   } catch (error) {
-    console.error("API POST /api/rakhi failed:", error);
+    console.error("API POST /api/janmashtami failed:", error);
     return NextResponse.json(
       { success: false, error: "Internal server error" },
       { status: 500 }
