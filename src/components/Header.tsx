@@ -149,11 +149,25 @@ export default function Header() {
                 href="/all-tools"
                 className={`rounded-lg px-2.5 py-2 text-[13px] font-medium transition-colors ${
                   pathname === "/all-tools"
-                    ? "text-primary-text"
+                    ? "text-primary-text font-semibold"
                     : "text-secondary-text hover:text-primary-text"
                 }`}
               >
                 All Tools
+              </Link>
+
+              <Link
+                href="/games"
+                className={`flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[13px] font-medium transition-colors ${
+                  pathname?.startsWith("/games")
+                    ? "text-primary-text font-semibold"
+                    : "text-secondary-text hover:text-primary-text"
+                }`}
+              >
+                <span>🎮</span> Games
+                <span className="rounded-full bg-emerald-500/10 px-1.5 py-0.2 text-[10px] font-bold text-emerald-600 border border-emerald-500/20">
+                  New
+                </span>
               </Link>
 
               {CATEGORIES.map((category) => {
@@ -334,6 +348,20 @@ function MobileMenu({ pathname, onClose }: { pathname: string; onClose: () => vo
           >
             All Tools
             <span className="text-xs font-medium text-secondary-text">{TOOLS.length}</span>
+          </Link>
+
+          <Link
+            href="/games"
+            onClick={onClose}
+            className="flex items-center justify-between rounded-xl px-3 py-3 text-[15px] font-semibold text-primary-text hover:bg-hover-bg"
+          >
+            <span className="flex items-center gap-2">
+              <span>🎮</span>
+              <span>Mini Games</span>
+            </span>
+            <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-600 border border-emerald-500/20">
+              New
+            </span>
           </Link>
 
           <div className="my-2 h-px bg-border-color" />

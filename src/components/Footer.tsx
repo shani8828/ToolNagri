@@ -56,6 +56,7 @@ export default function Footer() {
               </FooterLink>
             ))}
             <FooterLink href="/all-tools">All tools</FooterLink>
+            <FooterLink href="/games">🎮 Mini Games</FooterLink>
           </FooterColumn>
 
           {/* Popular */}

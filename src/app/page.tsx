@@ -15,7 +15,6 @@ import {
 
 import ToolCard from "@/components/ToolCard";
 import SearchTrigger from "@/components/SearchTrigger";
-import FestivalBanner from "@/components/FestivalBanner";
 import { CATEGORIES, type CategorySlug } from "@/lib/categories";
 import { POPULAR_TOOLS, TOOLS, toolsInCategory } from "@/lib/tools";
 import { homeJsonLd, pageMetadata } from "@/lib/seo";
@@ -57,11 +56,6 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: homeJsonLd() }}
       />
-
-      {/* Festival Promo Banner */}
-      <div className="mx-auto max-w-7xl px-4 pt-8 -mb-4 sm:px-6 lg:px-8 animate-fade-in">
-        <FestivalBanner />
-      </div>
 
       {/* ───────────────────────────── Hero ───────────────────────────── */}
 

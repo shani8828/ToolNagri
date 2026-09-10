@@ -46,6 +46,36 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    {
+      url: absoluteUrl("/games"),
+      lastModified: latest,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: absoluteUrl("/games/snake"),
+      lastModified: latest,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: absoluteUrl("/games/2048"),
+      lastModified: latest,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: absoluteUrl("/games/memory-match"),
+      lastModified: latest,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: absoluteUrl("/games/wordle"),
+      lastModified: latest,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
 
     // Category hubs - the pages targeting "free pdf tools online" and friends.
     ...CATEGORIES.map((category) => ({
